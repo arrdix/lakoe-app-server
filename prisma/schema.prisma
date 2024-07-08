@@ -19,3 +19,50 @@ model User {
   name  String?
 }
 
+model Products {
+  id           Int          @id @default(autoincrement())
+  name         String
+  description  String?
+  attachments  String
+  isActive     Boolean
+  variants     Variants[]
+  size         String
+  minimumOrder Int
+  storeId      Int
+  categories   Categories[]
+}
+
+model Categories {
+  id        Int      @id @default(autoincrement())
+  name      String
+  productId Int
+  products  Products @relation(fields: [productId], references: [id])
+}
+
+model Variants {
+  id        Int              @id @default(autoincrement())
+  name      String
+  isActive  Boolean
+  productId Int
+  products  Products         @relation(fields: [productId], references: [id])
+  options   VariantOptions[]
+}
+
+model VariantOptions {
+  id        Int                   @id @default(autoincrement())
+  name      String
+  variantId Int
+  variant   Variants              @relation(fields: [variantId], references: [id])
+  values    VariantOptionValues[]
+}
+
+model VariantOptionValues {
+  id              Int            @id @default(autoincrement())
+  variantOptionId Int
+  variantOptions  VariantOptions @relation(fields: [variantOptionId], references: [id])
+  sku             String
+  weight          Float
+  stock           Int
+  price           Float
+  isActive        Boolean
+}

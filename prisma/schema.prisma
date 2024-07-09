@@ -222,18 +222,18 @@ model BankAccounts {
 }
 
 model Products {
-  id           Int        @id @default(autoincrement())
+  id           Int     @id @default(autoincrement())
   name         String
   description  String?
   attachments  String
   isActive     Boolean
-  variants     Variants[]
   size         String
   minimumOrder Int
 
   Stores  Stores? @relation(fields: [storeId], references: [id])
   storeId Int?
 
+  variants   Variants[]
   catogories Categories[]
 }
 
@@ -241,8 +241,8 @@ model Categories {
   id   Int    @id @default(autoincrement())
   name String
 
-  products  Products @relation(fields: [productId], references: [id])
-  productId Int
+  products  Products? @relation(fields: [productId], references: [id])
+  productId Int?
 }
 
 model Variants {
@@ -250,8 +250,8 @@ model Variants {
   name     String
   isActive Boolean
 
-  products  Products @relation(fields: [productId], references: [id])
-  productId Int
+  products  Products? @relation(fields: [productId], references: [id])
+  productId Int?
 
   variantOptions VariantOptions[]
 }

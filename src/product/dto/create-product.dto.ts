@@ -1,24 +1,22 @@
-export class CreateProductDto {
-    name: string
-    description: string
-    attachments: string
-    isActive: boolean
-    size: string
-    minimumOrder: number
+import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator'
 
-    constructor(
-        name: string,
-        description: string,
-        attachments: string,
-        isActive: boolean,
-        size: string,
-        minimumOrder: number
-    ) {
-        this.name = name
-        this.description = description
-        this.attachments = attachments
-        this.isActive = isActive
-        this.size = size
-        this.minimumOrder = minimumOrder
-    }
+export class CreateProductDto {
+    @IsString()
+    name: string
+
+    @IsString()
+    @IsOptional()
+    description: string
+
+    @IsString()
+    attachments: string
+
+    @IsBoolean()
+    isActive: boolean
+
+    @IsString()
+    size: string
+
+    @IsNumber()
+    minimumOrder: number
 }

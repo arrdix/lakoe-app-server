@@ -94,7 +94,7 @@ model Invoices {
   Users  Users? @relation(fields: [userId], references: [id])
   userId Int?
 
-  confirmationPayment ConfirmationPayment[]
+  confirmationPayment ConfirmationPayment?
   courier             Couriers?
   Payments            Payments?
   invoiceHistory      InvoiceHistories[]
@@ -106,7 +106,7 @@ model ConfirmationPayment {
   bank   String
 
   Invoices  Invoices? @relation(fields: [invoiceId], references: [id])
-  invoiceId Int?
+  invoiceId Int       @unique
 }
 
 model InvoiceHistories {

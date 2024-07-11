@@ -14,13 +14,64 @@ export class ProductService {
     }
 
     findAll() {
-        return this.prismaService.products.findMany()
+        return this.prismaService.products.findMany({
+            include: {
+                variants: {
+                    include: {
+                        variantOptions: {
+                            include: {
+                                variantOptionValues: {
+                                    select: {
+                                        sku: true,
+                                        price: true,
+                                        weight: true,
+                                        stock: true,
+                                        isActive: true,
+                                        cartItems: true,
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+                categories: {
+                    select: {
+                        name: true,
+                    },
+                },
+            },
+        })
     }
 
     findOne(id: number) {
         return this.prismaService.products.findFirst({
             where: {
                 id,
+            },
+            include: {
+                variants: {
+                    include: {
+                        variantOptions: {
+                            include: {
+                                variantOptionValues: {
+                                    select: {
+                                        sku: true,
+                                        price: true,
+                                        weight: true,
+                                        stock: true,
+                                        isActive: true,
+                                        cartItems: true,
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+                categories: {
+                    select: {
+                        name: true,
+                    },
+                },
             },
         })
     }

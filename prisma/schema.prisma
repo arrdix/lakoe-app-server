@@ -14,10 +14,10 @@ datasource db {
 }
 
 model Users {
-  id       Int    @id @default(autoincrement())
+  id       Int     @id @default(autoincrement())
   name     String
-  email    String @unique
-  phone    Int?
+  email    String  @unique
+  phone    BigInt?
   password String
 
   Roles     Roles?  @relation(fields: [roleId], references: [id])
@@ -224,19 +224,18 @@ model BankAccounts {
 }
 
 model Products {
-  id           Int     @id @default(autoincrement())
+  id           Int      @id @default(autoincrement())
   name         String
   description  String?
-  attachments  String
+  attachments  String[]
   isActive     Boolean
-  size         String
   minimumOrder Int
 
   Stores  Stores? @relation(fields: [storeId], references: [id])
   storeId Int?
 
   variants   Variants[]
-  catogories Categories[]
+  categories Categories[]
 }
 
 model Categories {
@@ -265,7 +264,7 @@ model VariantOptions {
   variant   Variants @relation(fields: [variantId], references: [id])
   variantId Int
 
-  values VariantOptionValues[]
+  variantOptionValues VariantOptionValues[]
 }
 
 model VariantOptionValues {

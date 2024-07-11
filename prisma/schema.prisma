@@ -20,7 +20,7 @@ model Users {
   phone    BigInt?
   password String
 
-  Roles     Roles?  @relation(fields: [roleId], references: [id])
+  roles     Roles?  @relation(fields: [roleId], references: [id])
   roleId    Int?
   Profile   Profile @relation(fields: [profileId], references: [id])
   profileId Int     @unique
@@ -66,13 +66,13 @@ model CartItems {
   qty   Int
   price Int
 
-  Carts                Carts?               @relation(fields: [cartId], references: [id])
+  carts                Carts?               @relation(fields: [cartId], references: [id])
   cartId               Int?
-  Users                Users?               @relation(fields: [userId], references: [id])
+  users                Users?               @relation(fields: [userId], references: [id])
   userId               Int?
   Stores               Stores?              @relation(fields: [storeId], references: [id])
   storeId              Int?
-  VariantOptionValues  VariantOptionValues? @relation(fields: [variantOptionValueId], references: [id])
+  variantOptionValues  VariantOptionValues? @relation(fields: [variantOptionValueId], references: [id])
   variantOptionValueId Int?
 }
 
@@ -89,14 +89,14 @@ model Invoices {
   receiverName       String
   receiverNumber     Int
 
-  Carts  Carts? @relation(fields: [cartId], references: [id])
+  carts  Carts? @relation(fields: [cartId], references: [id])
   cartId Int?
-  Users  Users? @relation(fields: [userId], references: [id])
+  users  Users? @relation(fields: [userId], references: [id])
   userId Int?
 
   confirmationPayment ConfirmationPayment?
   courier             Couriers?
-  Payments            Payments?
+  payments            Payments?
   invoiceHistory      InvoiceHistories[]
   createdAt           DateTime             @default(now())
   updatedAt           DateTime             @default(now()) @updatedAt
@@ -107,7 +107,7 @@ model ConfirmationPayment {
   amount Int
   bank   String
 
-  Invoices  Invoices? @relation(fields: [invoiceId], references: [id])
+  invoice   Invoices? @relation(fields: [invoiceId], references: [id])
   invoiceId Int       @unique
 }
 
@@ -116,7 +116,7 @@ model InvoiceHistories {
   status    String
   createdAt DateTime @default(now())
 
-  Invoices  Invoices? @relation(fields: [invoiceId], references: [id])
+  invoice   Invoices? @relation(fields: [invoiceId], references: [id])
   invoiceId Int?
 }
 
@@ -139,7 +139,7 @@ model Couriers {
   price              Int
   orderId            Int
 
-  Invoices  Invoices? @relation(fields: [invoiceId], references: [id])
+  invoice   Invoices? @relation(fields: [invoiceId], references: [id])
   invoiceId Int       @unique
 }
 
@@ -165,7 +165,7 @@ model Stores {
 model StoreOnDecorations {
   id Int @id @default(autoincrement())
 
-  Decorations  Decorations? @relation(fields: [decorationId], references: [id])
+  decorations  Decorations? @relation(fields: [decorationId], references: [id])
   decorationId Int?
   Stores       Stores?      @relation(fields: [storeId], references: [id])
   storeId      Int?
@@ -183,7 +183,7 @@ model OperationHours {
   closeAt Int
   isOff   Boolean
 
-  Stores  Stores? @relation(fields: [storeId], references: [id])
+  stores  Stores? @relation(fields: [storeId], references: [id])
   storeId Int?
 }
 
@@ -192,7 +192,7 @@ model MessageTemplate {
   name    String
   content String
 
-  Stores  Stores? @relation(fields: [storeId], references: [id])
+  stores  Stores? @relation(fields: [storeId], references: [id])
   storeId Int?
 }
 
@@ -206,10 +206,10 @@ model Locations {
   longtitude     Float
   isMainLocation Boolean
 
-  Stores  Stores? @relation(fields: [storeId], references: [id])
+  stores  Stores? @relation(fields: [storeId], references: [id])
   storeId Int?
 
-  Profile   Profile? @relation(fields: [profileId], references: [id])
+  profile   Profile? @relation(fields: [profileId], references: [id])
   profileId Int?
 }
 
@@ -219,7 +219,7 @@ model BankAccounts {
   accNumber Int
   accName   String
 
-  Stores  Stores? @relation(fields: [storeId], references: [id])
+  stores  Stores? @relation(fields: [storeId], references: [id])
   storeId Int?
 }
 
@@ -231,7 +231,7 @@ model Products {
   isActive     Boolean
   minimumOrder Int
 
-  Stores  Stores? @relation(fields: [storeId], references: [id])
+  stores  Stores? @relation(fields: [storeId], references: [id])
   storeId Int?
 
   variants   Variants[]
@@ -264,7 +264,7 @@ model VariantOptions {
   variant   Variants @relation(fields: [variantId], references: [id])
   variantId Int
 
-  variantOptionValues VariantOptionValues[]
+  variantOptionValues VariantOptionValues?
 }
 
 model VariantOptionValues {
@@ -276,7 +276,7 @@ model VariantOptionValues {
   isActive Boolean
 
   variantOptions  VariantOptions @relation(fields: [variantOptionId], references: [id])
-  variantOptionId Int
+  variantOptionId Int            @unique
 
   cartItems CartItems[]
 }

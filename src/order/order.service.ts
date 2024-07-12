@@ -12,8 +12,32 @@ export class OrderService {
     });
   }
 
-  findAll() {
-    return this.prismaService.invoices.findMany();
+  async findAll() {
+    return await this.prismaService.invoices.findMany({
+      include: {
+        carts: {
+          include: {
+            cartItems: {
+              include: {
+                variantOptionValues: {
+                  include: {
+                    variantOptions: {
+                      include: {
+                        variant: {
+                          include: {
+                            products: true,
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
   }
 
   findOne(id: number) {

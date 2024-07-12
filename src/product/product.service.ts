@@ -22,6 +22,7 @@ export class ProductService {
                             include: {
                                 variantOptionValues: {
                                     select: {
+                                        id: true,
                                         sku: true,
                                         price: true,
                                         weight: true,
@@ -55,6 +56,7 @@ export class ProductService {
                             include: {
                                 variantOptionValues: {
                                     select: {
+                                        id: true,
                                         sku: true,
                                         price: true,
                                         weight: true,

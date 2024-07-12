@@ -18,6 +18,9 @@ export class CartService {
             where: {
                 id,
             },
+            include: {
+                cartItems: true,
+            },
         })
     }
 

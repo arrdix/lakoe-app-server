@@ -1,33 +1,18 @@
-import { IsNumber, IsString } from 'class-validator'
+import { Cart } from 'src/types/cart-type'
 
-export class CreateOrderDto {
-    @IsNumber()
+export type Invoice = {
+    id: number
     price: number
-
-    @IsNumber()
     serviceCharge: number
-
-    @IsString()
     status: string
-
-    @IsNumber()
     receiverLatitude: number
-
-    @IsNumber()
     receiverLongtitude: number
-
-    @IsString()
     receiverDistrict: string
-
-    @IsString()
     receiverPhone: string
-
-    @IsString()
     receiverAddress: string
-
-    @IsString()
     receiverName: string
-
-    @IsString()
     invoiceNumber: string
+    createdAt: Date
+    updatedAt: Date
+    carts?: Cart[]
 }

@@ -17,7 +17,7 @@ model Users {
   id       Int     @id @default(autoincrement())
   name     String
   email    String  @unique
-  phone    BigInt?
+  phone    String?
   password String
 
   roles Roles?  @relation(fields: [role], references: [name])
@@ -77,17 +77,17 @@ model CartItems {
 }
 
 model Invoices {
-  id                 Int    @id @default(autoincrement())
+  id                 Int     @id @default(autoincrement())
   price              Int
   serviceCharge      Int
   status             String
   receiverLatitude   Float
   receiverLongtitude Float
   receiverDistrict   String
-  receiverPhone      Int
+  receiverPhone      String?
   receiverAddress    String
   receiverName       String
-  receiverNumber     Int
+  invoiceNumber      String
 
   carts  Carts? @relation(fields: [cartId], references: [id])
   cartId Int?
@@ -261,10 +261,11 @@ model VariantOptions {
   id   Int    @id @default(autoincrement())
   name String
 
-  variant   Variants @relation(fields: [variantId], references: [id])
-  variantId Int
+  variant   Variants? @relation(fields: [variantId], references: [id])
+  variantId Int?
 
-  variantOptionValues VariantOptionValues?
+  variantOptionValue    VariantOptionValues? @relation(fields: [variantOptionValuesId], references: [id])
+  variantOptionValuesId Int?                 @unique
 }
 
 model VariantOptionValues {
@@ -275,8 +276,6 @@ model VariantOptionValues {
   price    Float
   isActive Boolean
 
-  variantOptions  VariantOptions @relation(fields: [variantOptionId], references: [id])
-  variantOptionId Int            @unique
-
-  cartItems CartItems[]
+  cartItems      CartItems[]
+  variantOptions VariantOptions?
 }

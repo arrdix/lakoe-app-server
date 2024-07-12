@@ -1,21 +1,11 @@
-/*
-  Warnings:
-
-  - You are about to drop the `User` table. If the table is not empty, all the data it contains will be lost.
-
-*/
--- DropTable
-DROP TABLE "User";
-
 -- CreateTable
 CREATE TABLE "Users" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
-    "phone" INTEGER,
+    "phone" BIGINT,
     "password" TEXT NOT NULL,
-    "roleId" INTEGER,
-    "profileId" INTEGER NOT NULL,
+    "role" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -33,7 +23,7 @@ CREATE TABLE "Roles" (
 -- CreateTable
 CREATE TABLE "Profile" (
     "id" SERIAL NOT NULL,
-    "locations" TEXT NOT NULL,
+    "userId" INTEGER,
 
     CONSTRAINT "Profile_pkey" PRIMARY KEY ("id")
 );
@@ -77,6 +67,8 @@ CREATE TABLE "Invoices" (
     "receiverNumber" INTEGER NOT NULL,
     "cartId" INTEGER,
     "userId" INTEGER,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Invoices_pkey" PRIMARY KEY ("id")
 );
@@ -86,7 +78,7 @@ CREATE TABLE "ConfirmationPayment" (
     "id" SERIAL NOT NULL,
     "amount" INTEGER NOT NULL,
     "bank" TEXT NOT NULL,
-    "invoiceId" INTEGER,
+    "invoiceId" INTEGER NOT NULL,
 
     CONSTRAINT "ConfirmationPayment_pkey" PRIMARY KEY ("id")
 );
@@ -209,9 +201,8 @@ CREATE TABLE "Products" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "description" TEXT,
-    "attachments" TEXT NOT NULL,
+    "attachments" TEXT[],
     "isActive" BOOLEAN NOT NULL,
-    "size" TEXT NOT NULL,
     "minimumOrder" INTEGER NOT NULL,
     "storeId" INTEGER,
 
@@ -222,7 +213,7 @@ CREATE TABLE "Products" (
 CREATE TABLE "Categories" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
-    "productId" INTEGER NOT NULL,
+    "productId" INTEGER,
 
     CONSTRAINT "Categories_pkey" PRIMARY KEY ("id")
 );
@@ -232,7 +223,7 @@ CREATE TABLE "Variants" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "isActive" BOOLEAN NOT NULL,
-    "productId" INTEGER NOT NULL,
+    "productId" INTEGER,
 
     CONSTRAINT "Variants_pkey" PRIMARY KEY ("id")
 );
@@ -263,7 +254,13 @@ CREATE TABLE "VariantOptionValues" (
 CREATE UNIQUE INDEX "Users_email_key" ON "Users"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Users_profileId_key" ON "Users"("profileId");
+CREATE UNIQUE INDEX "Roles_name_key" ON "Roles"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Profile_userId_key" ON "Profile"("userId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "ConfirmationPayment_invoiceId_key" ON "ConfirmationPayment"("invoiceId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Payments_invoiceId_key" ON "Payments"("invoiceId");
@@ -271,11 +268,14 @@ CREATE UNIQUE INDEX "Payments_invoiceId_key" ON "Payments"("invoiceId");
 -- CreateIndex
 CREATE UNIQUE INDEX "Couriers_invoiceId_key" ON "Couriers"("invoiceId");
 
--- AddForeignKey
-ALTER TABLE "Users" ADD CONSTRAINT "Users_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "Roles"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+-- CreateIndex
+CREATE UNIQUE INDEX "VariantOptionValues_variantOptionId_key" ON "VariantOptionValues"("variantOptionId");
 
 -- AddForeignKey
-ALTER TABLE "Users" ADD CONSTRAINT "Users_profileId_fkey" FOREIGN KEY ("profileId") REFERENCES "Profile"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Users" ADD CONSTRAINT "Users_role_fkey" FOREIGN KEY ("role") REFERENCES "Roles"("name") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Profile" ADD CONSTRAINT "Profile_userId_fkey" FOREIGN KEY ("userId") REFERENCES "Users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Carts" ADD CONSTRAINT "Carts_userId_fkey" FOREIGN KEY ("userId") REFERENCES "Users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -302,7 +302,7 @@ ALTER TABLE "Invoices" ADD CONSTRAINT "Invoices_cartId_fkey" FOREIGN KEY ("cartI
 ALTER TABLE "Invoices" ADD CONSTRAINT "Invoices_userId_fkey" FOREIGN KEY ("userId") REFERENCES "Users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ConfirmationPayment" ADD CONSTRAINT "ConfirmationPayment_invoiceId_fkey" FOREIGN KEY ("invoiceId") REFERENCES "Invoices"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "ConfirmationPayment" ADD CONSTRAINT "ConfirmationPayment_invoiceId_fkey" FOREIGN KEY ("invoiceId") REFERENCES "Invoices"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "InvoiceHistories" ADD CONSTRAINT "InvoiceHistories_invoiceId_fkey" FOREIGN KEY ("invoiceId") REFERENCES "Invoices"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -338,10 +338,10 @@ ALTER TABLE "BankAccounts" ADD CONSTRAINT "BankAccounts_storeId_fkey" FOREIGN KE
 ALTER TABLE "Products" ADD CONSTRAINT "Products_storeId_fkey" FOREIGN KEY ("storeId") REFERENCES "Stores"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Categories" ADD CONSTRAINT "Categories_productId_fkey" FOREIGN KEY ("productId") REFERENCES "Products"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Categories" ADD CONSTRAINT "Categories_productId_fkey" FOREIGN KEY ("productId") REFERENCES "Products"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Variants" ADD CONSTRAINT "Variants_productId_fkey" FOREIGN KEY ("productId") REFERENCES "Products"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Variants" ADD CONSTRAINT "Variants_productId_fkey" FOREIGN KEY ("productId") REFERENCES "Products"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "VariantOptions" ADD CONSTRAINT "VariantOptions_variantId_fkey" FOREIGN KEY ("variantId") REFERENCES "Variants"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

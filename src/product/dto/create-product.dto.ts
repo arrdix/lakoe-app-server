@@ -15,9 +15,9 @@ export class CreateProductDto {
     @IsBoolean()
     isActive: boolean
 
-    @IsString()
-    size: string
-
     @IsNumber()
     minimumOrder: number
+
+    @IsNumber()
+    storeId: number
 }

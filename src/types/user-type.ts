@@ -4,7 +4,7 @@ export type User = {
     id: number
     name: string
     email: string
-    phone: bigint | string | null
+    phone: string
     password: string
     role: string | null
     createdAt: Date

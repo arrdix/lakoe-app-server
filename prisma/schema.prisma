@@ -241,6 +241,13 @@ model Products {
 model Categories {
   id   Int    @id @default(autoincrement())
   name String
+  // parentId Int?
+  // parent   Categories?  @relation("CategoriesProducts", fields: [parentId], references: [id])
+  // children Categories[] @relation("CategoriesProducts")
+
+  children Categories[] @relation("CategoriesProducts")
+  parent   Categories?  @relation("CategoriesProducts", fields: [parentId], references: [id])
+  parentId Int?
 
   products  Products? @relation(fields: [productId], references: [id])
   productId Int?

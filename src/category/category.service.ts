@@ -8,7 +8,19 @@ export class CategoryService {
   constructor(private readonly prismaService: PrismaService) {}
   create(createCategoryDto: CreateCategoryDto) {
     return this.prismaService.categories.create({
-      data: createCategoryDto,
+      data: {
+        name: createCategoryDto.name,
+        parent: {
+          create: {
+            name: "parent",
+          },
+        },
+        children: {
+          create: {
+            name: "children",
+          },
+        },
+      },
     });
   }
 

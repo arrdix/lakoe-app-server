@@ -1,33 +1,33 @@
-import { IsNumber, IsString } from 'class-validator'
+import { IsNumber, IsString } from "class-validator";
 
 export class CreateOrderDto {
-    @IsNumber()
-    price: number
+  @IsNumber()
+  price: number;
 
-    @IsNumber()
-    serviceCharge: number
+  @IsNumber()
+  serviceCharge: number;
 
-    @IsString()
-    status: string
+  @IsString()
+  status: string;
 
-    @IsNumber()
-    receiverLatitude: number
+  @IsNumber()
+  receiverLatitude: number;
 
-    @IsNumber()
-    receiverLongtitude: number
+  @IsNumber()
+  receiverLongtitude: number;
 
-    @IsString()
-    receiverDistrict: string
+  @IsString()
+  receiverDistrict: string;
 
-    @IsString()
-    receiverPhone: string
+  @IsString()
+  receiverPhone: string;
 
-    @IsString()
-    receiverAddress: string
+  @IsString()
+  receiverAddress: string;
 
-    @IsString()
-    receiverName: string
+  @IsString()
+  receiverName: string;
 
-    @IsString()
-    invoiceNumber: string
+  @IsString()
+  invoiceNumber: string;
 }

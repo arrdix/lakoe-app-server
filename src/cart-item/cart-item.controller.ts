@@ -12,11 +12,6 @@ export class CartItemController {
         return this.cartItemService.create(createCartItemDto)
     }
 
-    @Get()
-    findAll() {
-        return this.cartItemService.findAll()
-    }
-
     @Get(':id')
     findOne(@Param('id') id: string) {
         return this.cartItemService.findOne(+id)

@@ -41,10 +41,6 @@ export class CartItemService {
         })
     }
 
-    findAll() {
-        return `This action returns all cartItem`
-    }
-
     async findOne(id: number) {
         return await this.prismaService.cartItems.findFirst({
             where: {

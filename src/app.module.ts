@@ -9,6 +9,7 @@ import { CategoryModule } from "./category/category.module";
 import { VariantModule } from './variant/variant.module';
 import { VariantOptionModule } from './variant-option/variant-option.module';
 import { VariantOptionValueModule } from './variant-option-value/variant-option-value.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { VariantOptionValueModule } from './variant-option-value/variant-option-
     VariantModule,
     VariantOptionModule,
     VariantOptionValueModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],

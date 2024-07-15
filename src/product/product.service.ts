@@ -7,26 +7,163 @@ import { PrismaService } from 'src/prisma/prisma.service'
 export class ProductService {
     constructor(private readonly prismaService: PrismaService) {}
 
-    create(createProductDto: CreateProductDto) {
-        return this.prismaService.products.create({
+    async create(createProductDto: CreateProductDto) {
+        return await this.prismaService.products.create({
             data: createProductDto,
         })
     }
 
-    findAll() {
-        return this.prismaService.products.findMany()
-    }
-
-    findOne(id: number) {
-        return this.prismaService.products.findFirst({
-            where: {
-                id,
+    async findAll() {
+        const products = await this.prismaService.variantOptionValues.findMany({
+            include: {
+                variantOptions: {
+                    include: {
+                        variant: {
+                            include: {
+                                products: true,
+                            },
+                        },
+                    },
+                },
             },
+        })
+
+        return products.map((product) => {
+            const {
+                sku: productSKU,
+                weight,
+                stock,
+                price,
+                isActive,
+                variantOptions: {
+                    id: variantOptionId,
+                    name: variantOptionName,
+                    variantOptionValuesId,
+                    variant: {
+                        id: variantId,
+                        name: variantName,
+                        isActive: variantIsActive,
+                        products: {
+                            id: productId,
+                            name: productName,
+                            description,
+                            attachments,
+                            isActive: productIsActive,
+                            minimumOrder,
+                            storeId,
+                        },
+                    },
+                },
+            } = product
+
+            return {
+                id: productId,
+                name: productName,
+                description,
+                attachments,
+                isActive: productIsActive,
+                minimumOrder,
+                storeId,
+                variant: {
+                    id: variantId,
+                    name: variantName,
+                    isActive: variantIsActive,
+                    productId,
+                    variantOption: {
+                        id: variantOptionId,
+                        name: variantOptionName,
+                        variantId,
+                        variantOptionValue: {
+                            id: variantOptionValuesId,
+                            sku: productSKU,
+                            weight,
+                            stock,
+                            price,
+                            isActive,
+                        },
+                    },
+                },
+            }
         })
     }
 
-    update(id: number, updateProductDto: UpdateProductDto) {
-        return this.prismaService.products.update({
+    async findOne(sku: string) {
+        const product = await this.prismaService.variantOptionValues.findFirst({
+            where: {
+                sku,
+            },
+            include: {
+                variantOptions: {
+                    include: {
+                        variant: {
+                            include: {
+                                products: true,
+                            },
+                        },
+                    },
+                },
+            },
+        })
+
+        const {
+            sku: productSKU,
+            weight,
+            stock,
+            price,
+            isActive,
+            variantOptions: {
+                id: variantOptionId,
+                name: variantOptionName,
+                variantOptionValuesId,
+                variant: {
+                    id: variantId,
+                    name: variantName,
+                    isActive: variantIsActive,
+                    products: {
+                        id: productId,
+                        name: productName,
+                        description,
+                        attachments,
+                        isActive: productIsActive,
+                        minimumOrder,
+                        storeId,
+                    },
+                },
+            },
+        } = product
+
+        return {
+            id: productId,
+            name: productName,
+            description,
+            attachments,
+            isActive: productIsActive,
+            minimumOrder,
+            storeId,
+            variant: {
+                id: variantId,
+                name: variantName,
+                isActive: variantIsActive,
+                productId,
+                variantOption: {
+                    id: variantOptionId,
+                    name: variantOptionName,
+                    variantId,
+                    variantOptionValue: {
+                        id: variantOptionValuesId,
+                        sku: productSKU,
+                        weight,
+                        stock,
+                        price,
+                        isActive,
+                    },
+                },
+            },
+        }
+    }
+
+    async update(id: number, updateProductDto: UpdateProductDto) {
+        return await this.prismaService.products.update({
             where: {
                 id,
             },
@@ -34,8 +171,8 @@ export class ProductService {
         })
     }
 
-    remove(id: number) {
-        return this.prismaService.products.delete({
+    async remove(id: number) {
+        return await this.prismaService.products.delete({
             where: {
                 id,
             },

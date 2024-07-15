@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common'
-import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { PrismaService } from 'src/prisma/prisma.service'
-import { User } from 'src/types/user-type'
 import { CartService } from 'src/cart/cart.service'
 
 @Injectable()
@@ -11,36 +9,6 @@ export class UserService {
         private readonly prismaService: PrismaService,
         private readonly cartService: CartService
     ) {}
-
-    async create(createUserDto: CreateUserDto) {
-        // create new user
-        const createdUser: User = await this.prismaService.users.create({
-            data: createUserDto,
-        })
-
-        // create profile for new user
-        this.createProfile(createdUser.id)
-
-        // create default cart for new user
-        this.cartService.create({
-            price: 0,
-            discount: 0,
-            userId: createdUser.id,
-            storeId: null,
-        })
-
-        return {
-            status: 'Ok!',
-        }
-    }
-
-    async createProfile(userId: number) {
-        return await this.prismaService.profile.create({
-            data: {
-                userId,
-            },
-        })
-    }
 
     findAll() {
         return `This action returns all user`

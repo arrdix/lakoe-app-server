@@ -1,23 +1,30 @@
 import { Injectable } from "@nestjs/common";
 import { CreateCategoryDto } from "./dto/create-category.dto";
+import { CreateSubCategoryDto } from "./dto/create-subCategory.dto";
 import { UpdateCategoryDto } from "./dto/update-category.dto";
 import { PrismaService } from "src/prisma/prisma.service";
 
 @Injectable()
 export class CategoryService {
   constructor(private readonly prismaService: PrismaService) {}
-  create(createCategoryDto: CreateCategoryDto) {
+
+  // Untuk membuat cucu atau yg paling terakhir
+  createSubCategory(createSubCategory: CreateSubCategoryDto) {
+    return this.prismaService.categories.create({
+      data: {
+        name: createSubCategory.name,
+      },
+    });
+  }
+
+  // Untuk membuat parent atau parent dari cucu
+  createCategory(createCategoryDto: CreateCategoryDto) {
     return this.prismaService.categories.create({
       data: {
         name: createCategoryDto.name,
-        parent: {
-          create: {
-            name: "parent",
-          },
-        },
-        children: {
-          create: {
-            name: "children",
+        subcategory: {
+          connect: {
+            id: createCategoryDto.categoryId,
           },
         },
       },
@@ -25,7 +32,15 @@ export class CategoryService {
   }
 
   async findAll() {
-    return await this.prismaService.categories.findMany({});
+    return await this.prismaService.categories.findMany({
+      include: {
+        subcategory: {
+          include: {
+            subcategory: true,
+          },
+        },
+      },
+    });
   }
 
   async findOne(id: number) {

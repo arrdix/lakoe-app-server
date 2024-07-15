@@ -242,6 +242,10 @@ model Categories {
   id   Int    @id @default(autoincrement())
   name String
 
+  subcategoryId Int?
+  category      Categories?  @relation("CategoriesProducts", fields: [subcategoryId], references: [id])
+  subcategory   Categories[] @relation("CategoriesProducts")
+
   products  Products? @relation(fields: [productId], references: [id])
   productId Int?
 }

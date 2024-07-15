@@ -84,6 +84,7 @@ model Invoices {
   receiverLatitude   Float
   receiverLongtitude Float
   receiverDistrict   String
+  receiverVillage    String
   receiverPhone      Int
   receiverAddress    String
   receiverName       String

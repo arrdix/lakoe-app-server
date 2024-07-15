@@ -19,8 +19,11 @@ export class CreateOrderDto {
   @IsString()
   receiverDistrict: string;
 
+  @IsString()
+  receiverVillage: string;
+
   @IsNumber()
-  receiverPhone: number;
+  receiverPhone: string;
 
   @IsString()
   receiverAddress: string;

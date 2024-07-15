@@ -1,12 +1,3 @@
-/*
-  Warnings:
-
-  - You are about to drop the `User` table. If the table is not empty, all the data it contains will be lost.
-
-*/
--- DropTable
-DROP TABLE "User";
-
 -- CreateTable
 CREATE TABLE "Users" (
     "id" SERIAL NOT NULL,
@@ -71,6 +62,7 @@ CREATE TABLE "Invoices" (
     "receiverLatitude" DOUBLE PRECISION NOT NULL,
     "receiverLongtitude" DOUBLE PRECISION NOT NULL,
     "receiverDistrict" TEXT NOT NULL,
+    "receiverVillage" TEXT NOT NULL,
     "receiverPhone" INTEGER NOT NULL,
     "receiverAddress" TEXT NOT NULL,
     "receiverName" TEXT NOT NULL,
@@ -86,7 +78,7 @@ CREATE TABLE "ConfirmationPayment" (
     "id" SERIAL NOT NULL,
     "amount" INTEGER NOT NULL,
     "bank" TEXT NOT NULL,
-    "invoiceId" INTEGER,
+    "invoiceId" INTEGER NOT NULL,
 
     CONSTRAINT "ConfirmationPayment_pkey" PRIMARY KEY ("id")
 );
@@ -222,7 +214,7 @@ CREATE TABLE "Products" (
 CREATE TABLE "Categories" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
-    "productId" INTEGER NOT NULL,
+    "productId" INTEGER,
 
     CONSTRAINT "Categories_pkey" PRIMARY KEY ("id")
 );
@@ -232,7 +224,7 @@ CREATE TABLE "Variants" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "isActive" BOOLEAN NOT NULL,
-    "productId" INTEGER NOT NULL,
+    "productId" INTEGER,
 
     CONSTRAINT "Variants_pkey" PRIMARY KEY ("id")
 );
@@ -264,6 +256,9 @@ CREATE UNIQUE INDEX "Users_email_key" ON "Users"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Users_profileId_key" ON "Users"("profileId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "ConfirmationPayment_invoiceId_key" ON "ConfirmationPayment"("invoiceId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Payments_invoiceId_key" ON "Payments"("invoiceId");
@@ -302,7 +297,7 @@ ALTER TABLE "Invoices" ADD CONSTRAINT "Invoices_cartId_fkey" FOREIGN KEY ("cartI
 ALTER TABLE "Invoices" ADD CONSTRAINT "Invoices_userId_fkey" FOREIGN KEY ("userId") REFERENCES "Users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ConfirmationPayment" ADD CONSTRAINT "ConfirmationPayment_invoiceId_fkey" FOREIGN KEY ("invoiceId") REFERENCES "Invoices"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "ConfirmationPayment" ADD CONSTRAINT "ConfirmationPayment_invoiceId_fkey" FOREIGN KEY ("invoiceId") REFERENCES "Invoices"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "InvoiceHistories" ADD CONSTRAINT "InvoiceHistories_invoiceId_fkey" FOREIGN KEY ("invoiceId") REFERENCES "Invoices"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -338,10 +333,10 @@ ALTER TABLE "BankAccounts" ADD CONSTRAINT "BankAccounts_storeId_fkey" FOREIGN KE
 ALTER TABLE "Products" ADD CONSTRAINT "Products_storeId_fkey" FOREIGN KEY ("storeId") REFERENCES "Stores"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Categories" ADD CONSTRAINT "Categories_productId_fkey" FOREIGN KEY ("productId") REFERENCES "Products"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Categories" ADD CONSTRAINT "Categories_productId_fkey" FOREIGN KEY ("productId") REFERENCES "Products"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Variants" ADD CONSTRAINT "Variants_productId_fkey" FOREIGN KEY ("productId") REFERENCES "Products"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Variants" ADD CONSTRAINT "Variants_productId_fkey" FOREIGN KEY ("productId") REFERENCES "Products"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "VariantOptions" ADD CONSTRAINT "VariantOptions_variantId_fkey" FOREIGN KEY ("variantId") REFERENCES "Variants"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

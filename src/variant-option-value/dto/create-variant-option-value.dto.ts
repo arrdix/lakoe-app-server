@@ -1,18 +1,19 @@
-import { IsBoolean, IsInt, IsNumber, IsString } from "class-validator";
+import { IsBoolean, IsInt, IsNumber, IsOptional, IsString } from 'class-validator'
 
 export class CreateVariantOptionValueDto {
-  @IsString()
-  sku: string;
+    @IsString()
+    sku: string
 
-  @IsNumber()
-  weight: number;
+    @IsNumber()
+    weight: number
 
-  @IsInt()
-  stock: number;
+    @IsInt()
+    stock: number
 
-  @IsNumber()
-  price: number;
+    @IsNumber()
+    price: number
 
-  @IsBoolean()
-  isActive: boolean;
+    @IsOptional()
+    @IsBoolean()
+    isActive: boolean
 }

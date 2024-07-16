@@ -226,16 +226,19 @@ model BankAccounts {
 model Products {
   id           Int      @id @default(autoincrement())
   name         String
-  description  String?
+  description  String
   attachments  String[]
-  isActive     Boolean
+  isActive     Boolean  @default(true)
   minimumOrder Int
+  url          String   @unique
 
-  stores  Stores? @relation(fields: [storeId], references: [id])
+  stores  Stores? @relation(fields: [storeId], references: [id], onDelete: Cascade)
   storeId Int?
 
-  variants   Variants[]
-  categories Categories[]
+  category   Categories? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId Int?
+
+  variant Variants?
 }
 
 model Categories {
@@ -243,20 +246,19 @@ model Categories {
   name String
 
   subcategoryId Int?
-  category      Categories?  @relation("CategoriesProducts", fields: [subcategoryId], references: [id])
+  category      Categories?  @relation("CategoriesProducts", fields: [subcategoryId], references: [id], onDelete: Cascade)
   subcategory   Categories[] @relation("CategoriesProducts")
 
-  products  Products? @relation(fields: [productId], references: [id])
-  productId Int?
+  Products Products[]
 }
 
 model Variants {
   id       Int     @id @default(autoincrement())
   name     String
-  isActive Boolean
+  isActive Boolean @default(true)
 
-  products  Products? @relation(fields: [productId], references: [id])
-  productId Int?
+  products  Products? @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId Int?      @unique
 
   variantOptions VariantOptions[]
 }
@@ -268,7 +270,7 @@ model VariantOptions {
   variant   Variants? @relation(fields: [variantId], references: [id])
   variantId Int?
 
-  variantOptionValue    VariantOptionValues? @relation(fields: [variantOptionValuesId], references: [id])
+  variantOptionValue    VariantOptionValues? @relation(fields: [variantOptionValuesId], references: [id], onDelete: Cascade)
   variantOptionValuesId Int?                 @unique
 }
 
@@ -278,7 +280,7 @@ model VariantOptionValues {
   weight   Float
   stock    Int
   price    Float
-  isActive Boolean
+  isActive Boolean @default(true)
 
   cartItems      CartItems[]
   variantOptions VariantOptions?

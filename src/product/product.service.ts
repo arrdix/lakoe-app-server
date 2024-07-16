@@ -9,7 +9,33 @@ export class ProductService {
 
     async create(createProductDto: CreateProductDto) {
         return await this.prismaService.products.create({
-            data: createProductDto,
+            data: {
+                ...createProductDto,
+                variant: {
+                    create: {
+                        ...createProductDto.variant,
+                        variantOptions: {
+                            create: createProductDto.variant.variantOptions.map((option) => ({
+                                ...option,
+                                variantOptionValue: {
+                                    create: option.variantOptionValue,
+                                },
+                            })),
+                        },
+                    },
+                },
+            },
+            include: {
+                variant: {
+                    include: {
+                        variantOptions: {
+                            include: {
+                                variantOptionValue: true,
+                            },
+                        },
+                    },
+                },
+            },
         })
     }
 
@@ -163,12 +189,12 @@ export class ProductService {
     }
 
     async update(id: number, updateProductDto: UpdateProductDto) {
-        return await this.prismaService.products.update({
-            where: {
-                id,
-            },
-            data: updateProductDto,
-        })
+        // return await this.prismaService.products.update({
+        //     where: {
+        //         id,
+        //     },
+        //     data: updateProductDto,
+        // })
     }
 
     async remove(id: number) {

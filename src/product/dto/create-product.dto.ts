@@ -1,4 +1,10 @@
-import { IsBoolean, IsNumber, IsOptional, IsString } from "class-validator";
+import {
+  IsArray,
+  IsBoolean,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from "class-validator";
 
 export class CreateProductDto {
   @IsString()
@@ -8,15 +14,16 @@ export class CreateProductDto {
   @IsOptional()
   description: string;
 
-  @IsString()
-  attachments: string;
+  @IsArray()
+  @IsString({ each: true })
+  attachments: string[];
 
   @IsBoolean()
   isActive: boolean;
 
-  @IsString()
-  size: string;
-
   @IsNumber()
   minimumOrder: number;
+
+  @IsNumber()
+  storeId: number;
 }

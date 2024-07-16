@@ -22,7 +22,7 @@ export class CreateOrderDto {
   @IsString()
   receiverVillage: string;
 
-  @IsNumber()
+  @IsString()
   receiverPhone: string;
 
   @IsString()
@@ -31,6 +31,9 @@ export class CreateOrderDto {
   @IsString()
   receiverName: string;
 
-  @IsNumber()
-  receiverNumber: number;
+  @IsString()
+  notes: string;
+
+  @IsString()
+  invoiceNumber: string;
 }

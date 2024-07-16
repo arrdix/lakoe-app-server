@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { CreateOrderDto } from "./dto/create-order.dto";
 import { UpdateOrderDto } from "./dto/update-order.dto";
 import { PrismaService } from "src/prisma/prisma.service";
+import { Invoice } from "src/types/invoice-type";
 
 @Injectable()
 export class OrderService {
@@ -12,16 +13,45 @@ export class OrderService {
     });
   }
 
-  findAll() {
-    return this.prismaService.invoices.findMany();
+  async findAll() {
+    return await this.prismaService.invoices.findMany({
+      include: {
+        carts: {
+          include: {
+            cartItems: {
+              include: {
+                variantOptionValues: {
+                  include: {
+                    variantOptions: {
+                      include: {
+                        variant: {
+                          include: {
+                            products: true,
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
   }
 
-  findOne(id: number) {
-    return this.prismaService.invoices.findFirst({
+  async findOne(id: number) {
+    const rawInvoice: Invoice = await this.prismaService.invoices.findFirst({
       where: {
         id,
       },
     });
+
+    return {
+      ...rawInvoice,
+      receiverPhone: rawInvoice.receiverPhone.toString(),
+    };
   }
 
   update(id: number, updateOrderDto: UpdateOrderDto) {

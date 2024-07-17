@@ -6,10 +6,10 @@ import { CartItemModule } from "./cart-item/cart-item.module";
 import { CartModule } from "./cart/cart.module";
 import { UserModule } from "./user/user.module";
 import { CategoryModule } from "./category/category.module";
-import { VariantModule } from './variant/variant.module';
-import { VariantOptionModule } from './variant-option/variant-option.module';
-import { VariantOptionValueModule } from './variant-option-value/variant-option-value.module';
-import { AuthModule } from './auth/auth.module';
+import { VariantModule } from "./variant/variant.module";
+import { VariantOptionModule } from "./variant-option/variant-option.module";
+import { VariantOptionValueModule } from "./variant-option-value/variant-option-value.module";
+import { AuthModule } from "./auth/auth.module";
 
 @Module({
   imports: [

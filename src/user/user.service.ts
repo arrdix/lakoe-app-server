@@ -10,8 +10,18 @@ export class UserService {
         private readonly cartService: CartService
     ) {}
 
-    findAll() {
-        return `This action returns all user`
+    async getLoggedUser(id: number) {
+        const loggedUser = await this.prismaService.users.findFirst({
+            where: {
+                id,
+            },
+        })
+
+        delete loggedUser.password
+        delete loggedUser.createdAt
+        delete loggedUser.updatedAt
+
+        return loggedUser
     }
 
     async findOne(id: number) {

@@ -39,7 +39,71 @@ export class ProductService {
         })
     }
 
-    async findAll() {
+    async findAllByID() {
+        return this.prismaService.products.findMany({
+            include: {
+                variant: {
+                    include: {
+                        variantOptions: {
+                            include: {
+                                variantOptionValue: {
+                                    select: {
+                                        id: true,
+                                        sku: true,
+                                        price: true,
+                                        weight: true,
+                                        stock: true,
+                                        isActive: true,
+                                        cartItems: true,
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+                category: {
+                    select: {
+                        name: true,
+                    },
+                },
+            },
+        })
+    }
+
+    async findOneByID(id: number) {
+        return this.prismaService.products.findFirst({
+            where: {
+                id,
+            },
+            include: {
+                variant: {
+                    include: {
+                        variantOptions: {
+                            include: {
+                                variantOptionValue: {
+                                    select: {
+                                        sku: true,
+                                        price: true,
+                                        weight: true,
+                                        stock: true,
+                                        isActive: true,
+                                        cartItems: true,
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+                category: {
+                    select: {
+                        name: true,
+                    },
+                },
+            },
+        })
+    }
+
+    async findAllBySKU() {
         const products = await this.prismaService.variantOptionValues.findMany({
             include: {
                 variantOptions: {
@@ -113,7 +177,7 @@ export class ProductService {
         })
     }
 
-    async findOne(sku: string) {
+    async findOneBySKU(sku: string) {
         const product = await this.prismaService.variantOptionValues.findFirst({
             where: {
                 sku,

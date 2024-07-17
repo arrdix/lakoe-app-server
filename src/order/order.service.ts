@@ -42,9 +42,32 @@ export class OrderService {
   }
 
   async findOne(id: number) {
-    const rawInvoice: Invoice = await this.prismaService.invoices.findFirst({
+    const rawInvoice = await this.prismaService.invoices.findFirst({
       where: {
         id,
+      },
+      include: {
+        carts: {
+          include: {
+            cartItems: {
+              include: {
+                variantOptionValues: {
+                  include: {
+                    variantOptions: {
+                      include: {
+                        variant: {
+                          include: {
+                            products: true,
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
       },
     });
 

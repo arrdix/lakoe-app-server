@@ -1,4 +1,4 @@
-import { Controller, Get, Body, Patch, Param, Delete } from '@nestjs/common'
+import { Controller, Get, Body, Patch, Param, Delete, Response } from '@nestjs/common'
 import { UserService } from './user.service'
 import { UpdateUserDto } from './dto/update-user.dto'
 
@@ -6,9 +6,12 @@ import { UpdateUserDto } from './dto/update-user.dto'
 export class UserController {
     constructor(private readonly userService: UserService) {}
 
-    @Get()
-    findAll() {
-        return this.userService.findAll()
+    @Get('logged')
+    async getLoggedUser(@Response() res) {
+        const loggedUserId = res.locals.user.id
+        const loggedUser = await this.userService.getLoggedUser(loggedUserId)
+
+        return res.status(200).send(loggedUser)
     }
 
     @Get(':id')

@@ -12,14 +12,24 @@ export class ProductController {
         return this.productService.create(createProductDto)
     }
 
-    @Get()
-    findAll() {
-        return this.productService.findAll()
+    @Get('id')
+    findAllByID() {
+        return this.productService.findAllByID()
     }
 
-    @Get(':sku')
-    findOne(@Param('sku') sku: string) {
-        return this.productService.findOne(sku)
+    @Get('/id/:id')
+    findOneByID(@Param('sku') id: number) {
+        return this.productService.findOneByID(id)
+    }
+
+    @Get('sku')
+    findAllBySKU() {
+        return this.productService.findAllBySKU()
+    }
+
+    @Get('/sku/:sku')
+    findOneBySKU(@Param('sku') sku: string) {
+        return this.productService.findOneBySKU(sku)
     }
 
     @Patch(':id')

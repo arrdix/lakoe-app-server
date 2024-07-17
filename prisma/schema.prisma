@@ -278,7 +278,7 @@ model VariantOptions {
 
 model VariantOptionValues {
   id       Int     @id @default(autoincrement())
-  sku      String
+  sku      String  @unique
   weight   Float
   stock    Int
   price    Float

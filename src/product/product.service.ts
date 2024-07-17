@@ -268,4 +268,26 @@ export class ProductService {
             },
         })
     }
+
+    async removeBySKU(sku: string) {
+        return await this.prismaService.variantOptionValues.delete({
+            where: {
+                sku,
+            },
+        })
+    }
+
+    async removeManyBySKU(skus: string[]) {
+        return await this.prismaService.variantOptionValues.deleteMany({
+            where: {
+                sku: {
+                    in: skus
+                }
+            },
+        })
+    }
+
+
+    
+    
 }

@@ -179,25 +179,25 @@ async function main() {
         },
     })
 
-    await prisma.invoices.upsert({
-        where: { id: 666 },
-        update: {},
-        create: {
-            id: 666,
-            invoiceNumber: 'INV/666/MPL/666',
-            status: 'Belum Dibayar',
-            serviceCharge: 3500,
-            price: 666000,
-            receiverName: 'Buyer Lakoe',
-            receiverAddress: 'Jl. New York Timur no. 666',
-            receiverDistrict: 'Los Angeles',
-            receiverLatitude: 1.123123123,
-            receiverLongtitude: 3.321321321,
-            receiverPhone: '6281081081081',
-            cartId: 666,
-            userId: 999,
-        },
-    })
+    // await prisma.invoices.upsert({
+    //     where: { id: 666 },
+    //     update: {},
+    //     create: {
+    //         id: 666,
+    //         invoiceNumber: 'INV/666/MPL/666',
+    //         status: 'Belum Dibayar',
+    //         serviceCharge: 3500,
+    //         price: 666000,
+    //         receiverName: 'Buyer Lakoe',
+    //         receiverAddress: 'Jl. New York Timur no. 666',
+    //         receiverDistrict: 'Los Angeles',
+    //         receiverLatitude: 1.123123123,
+    //         receiverLongtitude: 3.321321321,
+    //         receiverPhone: '6281081081081',
+    //         cartId: 666,
+    //         userId: 999,
+    //     },
+    // })
 }
 
 main()

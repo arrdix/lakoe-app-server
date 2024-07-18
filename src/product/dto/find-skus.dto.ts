@@ -1,6 +1,6 @@
 import { IsArray, IsString } from 'class-validator'
 
-export class DeleteProductDto {
+export class SkusDto {
     @IsArray()
     @IsString({ each: true })
     skus: string[]

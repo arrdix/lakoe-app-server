@@ -8,6 +8,7 @@ import {
     Delete,
     UseInterceptors,
     UploadedFiles,
+    Header,
 } from '@nestjs/common'
 import { ProductService } from './product.service'
 import { CreateProductDto } from './dto/create-product.dto'
@@ -23,14 +24,32 @@ export class ProductController {
     ) {}
 
     @Post()
+    @Header('content-type', 'multipart/form-data')
     @UseInterceptors(FilesInterceptor('attachments'))
-    create(
+    async create(
         @Body() createProductDto: CreateProductDto,
-        @UploadedFiles() files: Array<Express.Multer.File>
+        @UploadedFiles() files: Express.Multer.File[]
     ) {
-        console.log(JSON.stringify(createProductDto, null, 2))
-        // this.cloudinaryService.uploadFile(files)
-        // return this.productService.create(createProductDto)
+        console.log(files)
+        console.log(JSON.stringify(createProductDto))
+
+        const attachments = []
+
+        for (const file of files) {
+            const imageUrl = await this.cloudinaryService.uploadFile(file)
+            attachments.push(imageUrl.url)
+        }
+
+        if (!attachments.length) {
+            return {
+                status: 'Failed!',
+            }
+        }
+
+        return await this.productService.create({
+            ...createProductDto,
+            attachments,
+        })
     }
 
     @Get('id')

@@ -10,15 +10,29 @@ export class ProductService {
     async create(createProductDto: CreateProductDto) {
         return await this.prismaService.products.create({
             data: {
-                ...createProductDto,
+                name: createProductDto.name,
+                description: createProductDto.description,
+                attachments: createProductDto.attachments,
+                isActive: createProductDto.isActive,
+                minimumOrder: +createProductDto.minimumOrder,
+                storeId: +createProductDto.storeId,
+                categoryId: +createProductDto.categoryId,
+                url: createProductDto.url,
                 variant: {
                     create: {
-                        ...createProductDto.variant,
+                        name: createProductDto.variant.name,
+                        isActive: createProductDto.variant.isActive,
                         variantOptions: {
                             create: createProductDto.variant.variantOptions.map((option) => ({
-                                ...option,
+                                name: option.name,
                                 variantOptionValue: {
-                                    create: option.variantOptionValue,
+                                    create: {
+                                        sku: option.variantOptionValue.sku,
+                                        weight: +option.variantOptionValue.weight,
+                                        stock: +option.variantOptionValue.stock,
+                                        price: +option.variantOptionValue.price,
+                                        isActive: JSON.parse(option.variantOptionValue.isActive),
+                                    },
                                 },
                             })),
                         },
@@ -253,12 +267,7 @@ export class ProductService {
     }
 
     async update(id: number, updateProductDto: UpdateProductDto) {
-        // return await this.prismaService.products.update({
-        //     where: {
-        //         id,
-        //     },
-        //     data: updateProductDto,
-        // })
+        console.log(id, updateProductDto)
     }
 
     async remove(id: number) {

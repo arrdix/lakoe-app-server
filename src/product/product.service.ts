@@ -11,7 +11,7 @@ export class ProductService {
         return await this.prismaService.products.create({
             data: {
                 ...createProductDto,
-                variants: {
+                variant: {
                     create: {
                         ...createProductDto.variant,
                         variantOptions: {
@@ -26,7 +26,7 @@ export class ProductService {
                 },
             },
             include: {
-                variants: {
+                variant: {
                     include: {
                         variantOptions: {
                             include: {

@@ -16,7 +16,11 @@ export class UserModule implements NestModule {
             .exclude(
                 { path: '/auth/login', method: RequestMethod.POST },
                 { path: '/auth/register', method: RequestMethod.POST },
-                { path: '/auth/forgot', method: RequestMethod.POST }
+                { path: '/auth/forgot', method: RequestMethod.POST },
+                { path: '/product/id', method: RequestMethod.GET },
+                { path: '/product/id/:id', method: RequestMethod.GET },
+                { path: '/product/sku', method: RequestMethod.GET },
+                { path: '/product/sku/:sku', method: RequestMethod.GET },
             )
             .forRoutes({ path: '*', method: RequestMethod.ALL })
     }

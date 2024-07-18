@@ -84,10 +84,12 @@ model Invoices {
   receiverLatitude   Float
   receiverLongtitude Float
   receiverDistrict   String
+  receiverVillage    String
   receiverPhone      String?
   receiverAddress    String
   receiverName       String
   invoiceNumber      String
+  notes              String?
 
   carts  Carts? @relation(fields: [cartId], references: [id])
   cartId Int?
@@ -276,7 +278,7 @@ model VariantOptions {
 
 model VariantOptionValues {
   id       Int     @id @default(autoincrement())
-  sku      String
+  sku      String  @unique
   weight   Float
   stock    Int
   price    Float

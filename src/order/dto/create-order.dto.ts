@@ -24,6 +24,9 @@ export class CreateOrderDto {
   receiverDistrict: string;
 
   @IsString()
+  receiverVillage: string;
+
+  @IsString()
   receiverPhone: string;
 
   @IsString()
@@ -31,6 +34,9 @@ export class CreateOrderDto {
 
   @IsString()
   receiverName: string;
+
+  @IsString()
+  notes: string;
 
   @IsString()
   invoiceNumber: string;

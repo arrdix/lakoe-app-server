@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { CreateProductDto } from './dto/create-product.dto'
 import { UpdateProductDto } from './dto/update-product.dto'
 import { PrismaService } from 'src/prisma/prisma.service'
+import { UpdateVariantOptionValueDto } from 'src/variant-option-value/dto/update-variant-option-value.dto'
 
 @Injectable()
 export class ProductService {
@@ -10,15 +11,29 @@ export class ProductService {
     async create(createProductDto: CreateProductDto) {
         return await this.prismaService.products.create({
             data: {
-                ...createProductDto,
+                name: createProductDto.name,
+                description: createProductDto.description,
+                attachments: createProductDto.attachments,
+                isActive: createProductDto.isActive,
+                minimumOrder: +createProductDto.minimumOrder,
+                storeId: +createProductDto.storeId,
+                categoryId: +createProductDto.categoryId,
+                url: createProductDto.url,
                 variant: {
                     create: {
-                        ...createProductDto.variant,
+                        name: createProductDto.variant.name,
+                        isActive: createProductDto.variant.isActive,
                         variantOptions: {
                             create: createProductDto.variant.variantOptions.map((option) => ({
-                                ...option,
+                                name: option.name,
                                 variantOptionValue: {
-                                    create: option.variantOptionValue,
+                                    create: {
+                                        sku: option.variantOptionValue.sku,
+                                        weight: +option.variantOptionValue.weight,
+                                        stock: +option.variantOptionValue.stock,
+                                        price: +option.variantOptionValue.price,
+                                        isActive: JSON.parse(option.variantOptionValue.isActive),
+                                    },
                                 },
                             })),
                         },
@@ -253,18 +268,69 @@ export class ProductService {
     }
 
     async update(id: number, updateProductDto: UpdateProductDto) {
-        // return await this.prismaService.products.update({
-        //     where: {
-        //         id,
-        //     },
-        //     data: updateProductDto,
-        // })
+        console.log(id, updateProductDto)
     }
 
     async remove(id: number) {
         return await this.prismaService.products.delete({
             where: {
                 id,
+            },
+        })
+    }
+
+    async removeBySKU(sku: string) {
+        return await this.prismaService.variantOptionValues.delete({
+            where: {
+                sku,
+            },
+        })
+    }
+
+    async removeManyBySKU(skus: string[]) {
+        return await this.prismaService.variantOptionValues.deleteMany({
+            where: {
+                sku: {
+                    in: skus,
+                },
+            },
+        })
+    }
+
+    async activedProductBySKU(sku: string, data: boolean) {
+        return await this.prismaService.variantOptionValues.update({
+            where: {
+                sku,
+            },
+            data: {
+                isActive: data,
+            },
+        })
+    }
+
+    async nonActivedManyBySKU(skus: string[]) {
+        return await this.prismaService.variantOptionValues.updateMany({
+            where: {
+                sku: {
+                    in: skus,
+                },
+            },
+            data: {
+                isActive: false,
+            },
+        })
+    }
+
+    async updateProductBySKU(sku: string, data: UpdateVariantOptionValueDto) {
+        return await this.prismaService.variantOptionValues.update({
+            where: {
+                sku,
+            },
+            data: {
+                sku: data.sku,
+                price: data.price,
+                stock: data.stock,
+                isActive: JSON.parse(data.isActive),
             },
         })
     }

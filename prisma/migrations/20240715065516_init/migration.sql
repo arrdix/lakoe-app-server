@@ -3,7 +3,7 @@ CREATE TABLE "Users" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
-    "phone" BIGINT,
+    "phone" TEXT,
     "password" TEXT NOT NULL,
     "role" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -61,10 +61,10 @@ CREATE TABLE "Invoices" (
     "receiverLatitude" DOUBLE PRECISION NOT NULL,
     "receiverLongtitude" DOUBLE PRECISION NOT NULL,
     "receiverDistrict" TEXT NOT NULL,
-    "receiverPhone" INTEGER NOT NULL,
+    "receiverPhone" TEXT,
     "receiverAddress" TEXT NOT NULL,
     "receiverName" TEXT NOT NULL,
-    "receiverNumber" INTEGER NOT NULL,
+    "invoiceNumber" TEXT NOT NULL,
     "cartId" INTEGER,
     "userId" INTEGER,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -213,6 +213,7 @@ CREATE TABLE "Products" (
 CREATE TABLE "Categories" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
+    "subcategoryId" INTEGER,
     "productId" INTEGER,
 
     CONSTRAINT "Categories_pkey" PRIMARY KEY ("id")
@@ -232,7 +233,8 @@ CREATE TABLE "Variants" (
 CREATE TABLE "VariantOptions" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
-    "variantId" INTEGER NOT NULL,
+    "variantId" INTEGER,
+    "variantOptionValuesId" INTEGER,
 
     CONSTRAINT "VariantOptions_pkey" PRIMARY KEY ("id")
 );
@@ -245,7 +247,6 @@ CREATE TABLE "VariantOptionValues" (
     "stock" INTEGER NOT NULL,
     "price" DOUBLE PRECISION NOT NULL,
     "isActive" BOOLEAN NOT NULL,
-    "variantOptionId" INTEGER NOT NULL,
 
     CONSTRAINT "VariantOptionValues_pkey" PRIMARY KEY ("id")
 );
@@ -269,7 +270,7 @@ CREATE UNIQUE INDEX "Payments_invoiceId_key" ON "Payments"("invoiceId");
 CREATE UNIQUE INDEX "Couriers_invoiceId_key" ON "Couriers"("invoiceId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "VariantOptionValues_variantOptionId_key" ON "VariantOptionValues"("variantOptionId");
+CREATE UNIQUE INDEX "VariantOptions_variantOptionValuesId_key" ON "VariantOptions"("variantOptionValuesId");
 
 -- AddForeignKey
 ALTER TABLE "Users" ADD CONSTRAINT "Users_role_fkey" FOREIGN KEY ("role") REFERENCES "Roles"("name") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -338,13 +339,16 @@ ALTER TABLE "BankAccounts" ADD CONSTRAINT "BankAccounts_storeId_fkey" FOREIGN KE
 ALTER TABLE "Products" ADD CONSTRAINT "Products_storeId_fkey" FOREIGN KEY ("storeId") REFERENCES "Stores"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "Categories" ADD CONSTRAINT "Categories_subcategoryId_fkey" FOREIGN KEY ("subcategoryId") REFERENCES "Categories"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Categories" ADD CONSTRAINT "Categories_productId_fkey" FOREIGN KEY ("productId") REFERENCES "Products"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Variants" ADD CONSTRAINT "Variants_productId_fkey" FOREIGN KEY ("productId") REFERENCES "Products"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "VariantOptions" ADD CONSTRAINT "VariantOptions_variantId_fkey" FOREIGN KEY ("variantId") REFERENCES "Variants"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "VariantOptions" ADD CONSTRAINT "VariantOptions_variantId_fkey" FOREIGN KEY ("variantId") REFERENCES "Variants"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "VariantOptionValues" ADD CONSTRAINT "VariantOptionValues_variantOptionId_fkey" FOREIGN KEY ("variantOptionId") REFERENCES "VariantOptions"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "VariantOptions" ADD CONSTRAINT "VariantOptions_variantOptionValuesId_fkey" FOREIGN KEY ("variantOptionValuesId") REFERENCES "VariantOptionValues"("id") ON DELETE SET NULL ON UPDATE CASCADE;

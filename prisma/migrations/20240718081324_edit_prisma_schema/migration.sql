@@ -61,18 +61,12 @@ CREATE TABLE "Invoices" (
     "receiverLatitude" DOUBLE PRECISION NOT NULL,
     "receiverLongtitude" DOUBLE PRECISION NOT NULL,
     "receiverDistrict" TEXT NOT NULL,
-<<<<<<<< HEAD:prisma/migrations/20240718040448_edit_prisma_schema/migration.sql
-========
     "receiverVillage" TEXT NOT NULL,
->>>>>>>> 2e6a896db5192f85dc80fe64517523533248768f:prisma/migrations/20240718051850_create_prisma_schema/migration.sql
     "receiverPhone" TEXT,
     "receiverAddress" TEXT NOT NULL,
     "receiverName" TEXT NOT NULL,
     "invoiceNumber" TEXT NOT NULL,
-<<<<<<<< HEAD:prisma/migrations/20240718040448_edit_prisma_schema/migration.sql
-========
     "notes" TEXT,
->>>>>>>> 2e6a896db5192f85dc80fe64517523533248768f:prisma/migrations/20240718051850_create_prisma_schema/migration.sql
     "cartId" INTEGER,
     "userId" INTEGER,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -286,12 +280,9 @@ CREATE UNIQUE INDEX "Variants_productId_key" ON "Variants"("productId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "VariantOptions_variantOptionValuesId_key" ON "VariantOptions"("variantOptionValuesId");
-<<<<<<<< HEAD:prisma/migrations/20240718040448_edit_prisma_schema/migration.sql
-========
 
 -- CreateIndex
 CREATE UNIQUE INDEX "VariantOptionValues_sku_key" ON "VariantOptionValues"("sku");
->>>>>>>> 2e6a896db5192f85dc80fe64517523533248768f:prisma/migrations/20240718051850_create_prisma_schema/migration.sql
 
 -- AddForeignKey
 ALTER TABLE "Users" ADD CONSTRAINT "Users_role_fkey" FOREIGN KEY ("role") REFERENCES "Roles"("name") ON DELETE SET NULL ON UPDATE CASCADE;

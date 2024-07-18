@@ -60,8 +60,8 @@ export class ProductController {
     }
 
     @Get('/id/:id')
-    findOneByID(@Param('sku') id: number) {
-        return this.productService.findOneByID(id)
+    findOneByID(@Param('id') id: number) {
+        return this.productService.findOneByID(+id)
     }
 
     @Get('sku')

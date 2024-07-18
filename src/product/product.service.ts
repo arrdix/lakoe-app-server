@@ -330,7 +330,6 @@ export class ProductService {
                 sku: data.sku,
                 price: data.price,
                 stock: data.stock,
-                isActive: JSON.parse(data.isActive),
             },
         })
     }

@@ -1,216 +1,243 @@
-import { Injectable } from "@nestjs/common";
-import { CreateProductDto } from "./dto/create-product.dto";
-import { UpdateProductDto } from "./dto/update-product.dto";
-import { PrismaService } from "src/prisma/prisma.service";
-import { UpdateVariantOptionValueDto } from "src/variant-option-value/dto/update-variant-option-value.dto";
+import { Injectable } from '@nestjs/common'
+import { CreateProductDto } from './dto/create-product.dto'
+import { UpdateProductDto } from './dto/update-product.dto'
+import { PrismaService } from 'src/prisma/prisma.service'
+import { UpdateVariantOptionValueDto } from 'src/variant-option-value/dto/update-variant-option-value.dto'
 
 @Injectable()
 export class ProductService {
-  constructor(private readonly prismaService: PrismaService) {}
+    constructor(private readonly prismaService: PrismaService) {}
 
-  async create(createProductDto: CreateProductDto) {
-    return await this.prismaService.products.create({
-      data: {
-        ...createProductDto,
-        variant: {
-          create: {
-            ...createProductDto.variant,
-            variantOptions: {
-              create: createProductDto.variant.variantOptions.map((option) => ({
-                ...option,
-                variantOptionValue: {
-                  create: option.variantOptionValue,
+    async create(createProductDto: CreateProductDto) {
+        return await this.prismaService.products.create({
+            data: {
+                name: createProductDto.name,
+                description: createProductDto.description,
+                attachments: createProductDto.attachments,
+                isActive: createProductDto.isActive,
+                minimumOrder: +createProductDto.minimumOrder,
+                storeId: +createProductDto.storeId,
+                categoryId: +createProductDto.categoryId,
+                url: createProductDto.url,
+                variant: {
+                    create: {
+                        name: createProductDto.variant.name,
+                        isActive: createProductDto.variant.isActive,
+                        variantOptions: {
+                            create: createProductDto.variant.variantOptions.map((option) => ({
+                                name: option.name,
+                                variantOptionValue: {
+                                    create: {
+                                        sku: option.variantOptionValue.sku,
+                                        weight: +option.variantOptionValue.weight,
+                                        stock: +option.variantOptionValue.stock,
+                                        price: +option.variantOptionValue.price,
+                                        isActive: JSON.parse(option.variantOptionValue.isActive),
+                                    },
+                                },
+                            })),
+                        },
+                    },
                 },
-              })),
             },
-          },
-        },
-      },
-      include: {
-        variant: {
-          include: {
-            variantOptions: {
-              include: {
-                variantOptionValue: true,
-              },
-            },
-          },
-        },
-      },
-    });
-  }
-
-  async findAllByID() {
-    return this.prismaService.products.findMany({
-      include: {
-        variant: {
-          include: {
-            variantOptions: {
-              include: {
-                variantOptionValue: {
-                  select: {
-                    id: true,
-                    sku: true,
-                    price: true,
-                    weight: true,
-                    stock: true,
-                    isActive: true,
-                    cartItems: true,
-                  },
+            include: {
+                variant: {
+                    include: {
+                        variantOptions: {
+                            include: {
+                                variantOptionValue: true,
+                            },
+                        },
+                    },
                 },
-              },
             },
-          },
-        },
-        category: {
-          select: {
-            name: true,
-          },
-        },
-      },
-    });
-  }
+        })
+    }
 
-  async findOneByID(id: number) {
-    return this.prismaService.products.findFirst({
-      where: {
-        id,
-      },
-      include: {
-        variant: {
-          include: {
-            variantOptions: {
-              include: {
-                variantOptionValue: {
-                  select: {
-                    sku: true,
-                    price: true,
-                    weight: true,
-                    stock: true,
-                    isActive: true,
-                    cartItems: true,
-                  },
+    async findAllByID() {
+        return this.prismaService.products.findMany({
+            include: {
+                variant: {
+                    include: {
+                        variantOptions: {
+                            include: {
+                                variantOptionValue: {
+                                    select: {
+                                        id: true,
+                                        sku: true,
+                                        price: true,
+                                        weight: true,
+                                        stock: true,
+                                        isActive: true,
+                                        cartItems: true,
+                                    },
+                                },
+                            },
+                        },
+                    },
                 },
-              },
+                category: {
+                    select: {
+                        name: true,
+                    },
+                },
             },
-          },
-        },
-        category: {
-          select: {
-            name: true,
-          },
-        },
-      },
-    });
-  }
+        })
+    }
 
-  async findAllBySKU() {
-    const products = await this.prismaService.variantOptionValues.findMany({
-      include: {
-        variantOptions: {
-          include: {
-            variant: {
-              include: {
-                products: true,
-              },
+    async findOneByID(id: number) {
+        return this.prismaService.products.findFirst({
+            where: {
+                id,
             },
-          },
-        },
-      },
-    });
-
-    return products.map((product) => {
-      const {
-        sku: productSKU,
-        weight,
-        stock,
-        price,
-        isActive,
-        variantOptions: {
-          id: variantOptionId,
-          name: variantOptionName,
-          variantOptionValuesId,
-          variant: {
-            id: variantId,
-            name: variantName,
-            isActive: variantIsActive,
-            products: {
-              id: productId,
-              name: productName,
-              description,
-              attachments,
-              isActive: productIsActive,
-              minimumOrder,
-              storeId,
+            include: {
+                variant: {
+                    include: {
+                        variantOptions: {
+                            include: {
+                                variantOptionValue: {
+                                    select: {
+                                        sku: true,
+                                        price: true,
+                                        weight: true,
+                                        stock: true,
+                                        isActive: true,
+                                        cartItems: true,
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+                category: {
+                    select: {
+                        name: true,
+                    },
+                },
             },
-          },
-        },
-      } = product;
+        })
+    }
 
-      return {
-        id: productId,
-        name: productName,
-        description,
-        attachments,
-        isActive: productIsActive,
-        minimumOrder,
-        storeId,
-        variant: {
-          id: variantId,
-          name: variantName,
-          isActive: variantIsActive,
-          productId,
-          variantOption: {
-            id: variantOptionId,
-            name: variantOptionName,
-            variantId,
-            variantOptionValue: {
-              id: variantOptionValuesId,
-              sku: productSKU,
-              weight,
-              stock,
-              price,
-              isActive,
+    async findAllBySKU() {
+        const products = await this.prismaService.variantOptionValues.findMany({
+            include: {
+                variantOptions: {
+                    include: {
+                        variant: {
+                            include: {
+                                products: true,
+                            },
+                        },
+                    },
+                },
             },
-          },
-        },
-      };
-    });
-  }
+        })
 
-  async findOneBySKU(sku: string) {
-    const product = await this.prismaService.variantOptionValues.findFirst({
-      where: {
-        sku,
-      },
-      include: {
-        variantOptions: {
-          include: {
-            variant: {
-              include: {
-                products: true,
-              },
+        return products.map((product) => {
+            const {
+                sku: productSKU,
+                weight,
+                stock,
+                price,
+                isActive,
+                variantOptions: {
+                    id: variantOptionId,
+                    name: variantOptionName,
+                    variantOptionValuesId,
+                    variant: {
+                        id: variantId,
+                        name: variantName,
+                        isActive: variantIsActive,
+                        products: {
+                            id: productId,
+                            name: productName,
+                            description,
+                            attachments,
+                            isActive: productIsActive,
+                            minimumOrder,
+                            storeId,
+                        },
+                    },
+                },
+            } = product
+
+            return {
+                id: productId,
+                name: productName,
+                description,
+                attachments,
+                isActive: productIsActive,
+                minimumOrder,
+                storeId,
+                variant: {
+                    id: variantId,
+                    name: variantName,
+                    isActive: variantIsActive,
+                    productId,
+                    variantOption: {
+                        id: variantOptionId,
+                        name: variantOptionName,
+                        variantId,
+                        variantOptionValue: {
+                            id: variantOptionValuesId,
+                            sku: productSKU,
+                            weight,
+                            stock,
+                            price,
+                            isActive,
+                        },
+                    },
+                },
+            }
+        })
+    }
+
+    async findOneBySKU(sku: string) {
+        const product = await this.prismaService.variantOptionValues.findFirst({
+            where: {
+                sku,
             },
-          },
-        },
-      },
-    });
+            include: {
+                variantOptions: {
+                    include: {
+                        variant: {
+                            include: {
+                                products: true,
+                            },
+                        },
+                    },
+                },
+            },
+        })
 
-    const {
-      sku: productSKU,
-      weight,
-      stock,
-      price,
-      isActive,
-      variantOptions: {
-        id: variantOptionId,
-        name: variantOptionName,
-        variantOptionValuesId,
-        variant: {
-          id: variantId,
-          name: variantName,
-          isActive: variantIsActive,
-          products: {
+        const {
+            sku: productSKU,
+            weight,
+            stock,
+            price,
+            isActive,
+            variantOptions: {
+                id: variantOptionId,
+                name: variantOptionName,
+                variantOptionValuesId,
+                variant: {
+                    id: variantId,
+                    name: variantName,
+                    isActive: variantIsActive,
+                    products: {
+                        id: productId,
+                        name: productName,
+                        description,
+                        attachments,
+                        isActive: productIsActive,
+                        minimumOrder,
+                        storeId,
+                    },
+                },
+            },
+        } = product
+
+        return {
             id: productId,
             name: productName,
             description,
@@ -218,109 +245,93 @@ export class ProductService {
             isActive: productIsActive,
             minimumOrder,
             storeId,
-          },
-        },
-      },
-    } = product;
+            variant: {
+                id: variantId,
+                name: variantName,
+                isActive: variantIsActive,
+                productId,
+                variantOption: {
+                    id: variantOptionId,
+                    name: variantOptionName,
+                    variantId,
+                    variantOptionValue: {
+                        id: variantOptionValuesId,
+                        sku: productSKU,
+                        weight,
+                        stock,
+                        price,
+                        isActive,
+                    },
+                },
+            },
+        }
+    }
 
-    return {
-      id: productId,
-      name: productName,
-      description,
-      attachments,
-      isActive: productIsActive,
-      minimumOrder,
-      storeId,
-      variant: {
-        id: variantId,
-        name: variantName,
-        isActive: variantIsActive,
-        productId,
-        variantOption: {
-          id: variantOptionId,
-          name: variantOptionName,
-          variantId,
-          variantOptionValue: {
-            id: variantOptionValuesId,
-            sku: productSKU,
-            weight,
-            stock,
-            price,
-            isActive,
-          },
-        },
-      },
-    };
-  }
+    async update(id: number, updateProductDto: UpdateProductDto) {
+        console.log(id, updateProductDto)
+    }
 
-  async update(id: number, updateProductDto: UpdateProductDto) {
-    // return await this.prismaService.products.update({
-    //     where: {
-    //         id,
-    //     },
-    //     data: updateProductDto,
-    // })
-  }
+    async remove(id: number) {
+        return await this.prismaService.products.delete({
+            where: {
+                id,
+            },
+        })
+    }
 
-  async remove(id: number) {
-    return await this.prismaService.products.delete({
-      where: {
-        id,
-      },
-    });
-  }
+    async removeBySKU(sku: string) {
+        return await this.prismaService.variantOptionValues.delete({
+            where: {
+                sku,
+            },
+        })
+    }
 
-  async removeBySKU(sku: string) {
-    return await this.prismaService.variantOptionValues.delete({
-      where: {
-        sku,
-      },
-    });
-  }
+    async removeManyBySKU(skus: string[]) {
+        return await this.prismaService.variantOptionValues.deleteMany({
+            where: {
+                sku: {
+                    in: skus,
+                },
+            },
+        })
+    }
 
-  async removeManyBySKU(skus: string[]) {
-    return await this.prismaService.variantOptionValues.deleteMany({
-      where: {
-        sku: {
-          in: skus,
-        },
-      },
-    });
-  }
+    async activedProductBySKU(sku: string, data: boolean) {
+        return await this.prismaService.variantOptionValues.update({
+            where: {
+                sku,
+            },
+            data: {
+                isActive: data,
+            },
+        })
+    }
 
-  async activedProductBySKU(sku: string, data:boolean) {
+    async nonActivedManyBySKU(skus: string[]) {
+        return await this.prismaService.variantOptionValues.updateMany({
+            where: {
+                sku: {
+                    in: skus,
+                },
+            },
+            data: {
+                isActive: false,
+            },
+        })
+    }
 
-    return await this.prismaService.variantOptionValues.update({
-      where: {
-        sku,
-      },
-      data: {
-        isActive: data,
-      },
-    });
-  }
-
-  async nonActivedManyBySKU(skus: string[]) {
-    return await this.prismaService.variantOptionValues.updateMany({
-      where: {
-        sku: {
-          in: skus,
-        },
-      },
-      data:{
-        isActive: false
-      }
-    });
-  }
-
-  async updateProductBySKU(sku: string, data:UpdateVariantOptionValueDto) {
-
-    return await this.prismaService.variantOptionValues.update({
-      where: {
-        sku,
-      },
-      data: data,
-    });
-  }
-
+    async updateProductBySKU(sku: string, data: UpdateVariantOptionValueDto) {
+        return await this.prismaService.variantOptionValues.update({
+            where: {
+                sku,
+            },
+            data: {
+                sku: data.sku,
+                price: data.price,
+                stock: data.stock,
+                isActive: JSON.parse(data.isActive),
+            },
+        })
+    }
 }

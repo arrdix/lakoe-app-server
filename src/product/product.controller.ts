@@ -92,8 +92,7 @@ export class ProductController {
   // nonaktifkan banyak produk sku
   @Patch("nonActived/skus")
   nonActivedManyBySKU(@Body() skus: SkusDto) {
-    console.log(skus.skus);
-    return this.productService.removeManyBySKU(skus.skus);
+    return this.productService.nonActivedManyBySKU(skus.skus);
     // return(skus)
   }
 

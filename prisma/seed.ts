@@ -3,7 +3,7 @@ const prisma = new PrismaClient()
 import * as bcrypt from 'bcrypt'
 
 async function main() {
-    await prisma.$transaction(async (tx) => {
+    await prisma.$transaction(async () => {
         await prisma.roles.upsert({
             where: { id: 666 },
             update: {},
@@ -135,13 +135,19 @@ async function main() {
         })
 
         // Products
-        const productIds = [666, 667, 668, 669, 670]
         const products = [
             {
                 id: 666,
-                name: 'Kaos Polos',
-                description: 'Deskripsi kaos polos',
-                attachments: ['example.jpg'],
+                name: 'Kaos Polos Pria Cotton Combed 32s',
+                description:
+                    'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
+                attachments: [
+                    'http://res.cloudinary.com/dv8vfur0m/image/upload/v1721313212/dr0houftw6wu7znsnct1.jpg',
+                    'http://res.cloudinary.com/dv8vfur0m/image/upload/v1721313213/t1xr9jd1nh67ox5vdrtq.jpg',
+                    'http://res.cloudinary.com/dv8vfur0m/image/upload/v1721313214/wlzunhyzthwjbdkuouxb.jpg',
+                    'http://res.cloudinary.com/dv8vfur0m/image/upload/v1721313215/uyadduvivb0egh6pr7xb.jpg',
+                    'http://res.cloudinary.com/dv8vfur0m/image/upload/v1721313216/x5vcxiktmiqc5jafnc8d.jpg',
+                ],
                 minimumOrder: 1,
                 url: 'example.com',
                 isActive: true,
@@ -149,9 +155,13 @@ async function main() {
             },
             {
                 id: 667,
-                name: 'Celana Jeans',
-                description: 'Deskripsi celana jeans',
-                attachments: ['example2.jpg'],
+                name: 'Kaos Polos Wanita Cotton Combed 24s',
+                description:
+                    'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
+                attachments: [
+                    'http://res.cloudinary.com/dv8vfur0m/image/upload/v1721313213/t1xr9jd1nh67ox5vdrtq.jpg',
+                    'http://res.cloudinary.com/dv8vfur0m/image/upload/v1721313216/x5vcxiktmiqc5jafnc8d.jpg',
+                ],
                 minimumOrder: 1,
                 url: 'example2.com',
                 isActive: true,
@@ -159,31 +169,18 @@ async function main() {
             },
             {
                 id: 668,
-                name: 'Jaket Kulit',
-                description: 'Deskripsi jaket kulit',
-                attachments: ['example3.jpg'],
+                name: 'Nike Dunk Low Black White Panda GS',
+                description:
+                    'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
+                attachments: [
+                    'http://res.cloudinary.com/dv8vfur0m/image/upload/v1721314497/flxqcwbwv2yycraulfwa.jpg',
+                    'http://res.cloudinary.com/dv8vfur0m/image/upload/v1721314495/qirak47ay3srjc8du8jv.jpg',
+                    'http://res.cloudinary.com/dv8vfur0m/image/upload/v1721314498/qfoizmniixtfh6l9jlp6.jpg',
+                    'http://res.cloudinary.com/dv8vfur0m/image/upload/v1721314498/z6vww7jwmft8khd0bbnx.jpg',
+                    'http://res.cloudinary.com/dv8vfur0m/image/upload/v1721314500/knm0blqajswfzipz7gxt.jpg',
+                ],
                 minimumOrder: 1,
                 url: 'example3.com',
-                isActive: true,
-                categoryId: 666,
-            },
-            {
-                id: 669,
-                name: 'Sepatu Sneakers',
-                description: 'Deskripsi sepatu sneakers',
-                attachments: ['example4.jpg'],
-                minimumOrder: 1,
-                url: 'example4.com',
-                isActive: true,
-                categoryId: 666,
-            },
-            {
-                id: 670,
-                name: 'Topi Baseball',
-                description: 'Deskripsi topi baseball',
-                attachments: ['example5.jpg'],
-                minimumOrder: 1,
-                url: 'example5.com',
                 isActive: true,
                 categoryId: 666,
             },
@@ -202,7 +199,7 @@ async function main() {
             {
                 id: 666,
                 sku: 'SKU_HITAM_EXAMPLE',
-                price: 69000,
+                price: 49000,
                 stock: 100,
                 weight: 500,
                 isActive: true,
@@ -210,7 +207,7 @@ async function main() {
             {
                 id: 667,
                 sku: 'SKU_MERAH_EXAMPLE',
-                price: 75000,
+                price: 90000,
                 stock: 100,
                 weight: 500,
                 isActive: true,
@@ -226,7 +223,7 @@ async function main() {
             {
                 id: 669,
                 sku: 'SKU_HIJAU_EXAMPLE',
-                price: 72000,
+                price: 79000,
                 stock: 100,
                 weight: 500,
                 isActive: true,
@@ -234,7 +231,49 @@ async function main() {
             {
                 id: 670,
                 sku: 'SKU_PUTIH_EXAMPLE',
-                price: 71000,
+                price: 61000,
+                stock: 100,
+                weight: 500,
+                isActive: true,
+            },
+
+            {
+                id: 671,
+                sku: 'SKU_WOMEN_HIJAU_EXAMPLE',
+                price: 79000,
+                stock: 100,
+                weight: 500,
+                isActive: true,
+            },
+            {
+                id: 672,
+                sku: 'SKU_WOMEN_PUTIH_EXAMPLE',
+                price: 61000,
+                stock: 100,
+                weight: 500,
+                isActive: true,
+            },
+
+            {
+                id: 673,
+                sku: 'SKU_NIKE_S_EXAMPLE',
+                price: 120000,
+                stock: 100,
+                weight: 500,
+                isActive: true,
+            },
+            {
+                id: 674,
+                sku: 'SKU_NIKE_M_EXAMPLE',
+                price: 130000,
+                stock: 100,
+                weight: 500,
+                isActive: true,
+            },
+            {
+                id: 675,
+                sku: 'SKU_NIKE_L_EXAMPLE',
+                price: 99000,
                 stock: 100,
                 weight: 500,
                 isActive: true,
@@ -252,10 +291,8 @@ async function main() {
         // Variants
         const variants = [
             { id: 666, name: 'Warna', isActive: true, productId: 666 },
-            { id: 667, name: 'Ukuran', isActive: true, productId: 667 },
-            { id: 668, name: 'Bahan', isActive: true, productId: 668 },
-            { id: 669, name: 'Desain', isActive: true, productId: 669 },
-            { id: 670, name: 'Tipe', isActive: true, productId: 670 },
+            { id: 667, name: 'Warna', isActive: true, productId: 667 },
+            { id: 668, name: 'Ukuran', isActive: true, productId: 668 },
         ]
 
         for (const variant of variants) {
@@ -273,6 +310,13 @@ async function main() {
             { id: 668, name: 'BIRU', variantId: 666, variantOptionValuesId: 668 },
             { id: 669, name: 'HIJAU', variantId: 666, variantOptionValuesId: 669 },
             { id: 670, name: 'PUTIH', variantId: 666, variantOptionValuesId: 670 },
+
+            { id: 674, name: 'HIJAU', variantId: 667, variantOptionValuesId: 671 },
+            { id: 675, name: 'PUTIH', variantId: 667, variantOptionValuesId: 672 },
+
+            { id: 676, name: 'S', variantId: 668, variantOptionValuesId: 673 },
+            { id: 677, name: 'M', variantId: 668, variantOptionValuesId: 674 },
+            { id: 678, name: 'L', variantId: 668, variantOptionValuesId: 675 },
         ]
 
         for (const option of variantOptions) {

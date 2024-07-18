@@ -15,6 +15,8 @@ import { CreateProductDto } from './dto/create-product.dto'
 import { UpdateProductDto } from './dto/update-product.dto'
 import { FilesInterceptor } from '@nestjs/platform-express'
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service'
+import { SkusDto } from './dto/find-skus.dto'
+import { UpdateVariantOptionValueDto } from 'src/variant-option-value/dto/update-variant-option-value.dto'
 
 @Controller('product')
 export class ProductController {
@@ -80,5 +82,44 @@ export class ProductController {
     @Delete(':id')
     remove(@Param('id') id: string) {
         return this.productService.remove(+id)
+    }
+
+    // hapus persatuan sku
+    @Delete('sku/:sku')
+    removeBySKU(@Param('sku') sku: string) {
+        return this.productService.removeBySKU(sku)
+    }
+
+    // hapus banyak sku
+    @Delete('delete/skus')
+    removeManyBySKU(@Body() skus: SkusDto) {
+        console.log(skus.skus)
+        return this.productService.removeManyBySKU(skus.skus)
+        // return(skus)
+    }
+
+    // nonaktif atau aktifkan produk per sku
+    @Patch('update-isActive/:sku')
+    async activedProductBySKU(@Param('sku') sku: string) {
+        const dataProduct = await this.productService.findOneBySKU(sku)
+        const data = !dataProduct.variant.variantOption.variantOptionValue.isActive
+        return this.productService.activedProductBySKU(sku, data)
+        // return(skus)
+    }
+
+    // nonaktifkan banyak produk sku
+    @Patch('nonActived/skus')
+    nonActivedManyBySKU(@Body() skus: SkusDto) {
+        console.log(skus.skus)
+        return this.productService.removeManyBySKU(skus.skus)
+        // return(skus)
+    }
+
+    // update produk per sku
+    @Patch('update-bySKU/:sku')
+    updateBySKU(@Param('sku') sku: string, @Body() data: UpdateVariantOptionValueDto) {
+        // console.log(data)
+        return this.productService.updateProductBySKU(sku, data)
+        // return(data)
     }
 }

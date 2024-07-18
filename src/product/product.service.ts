@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { CreateProductDto } from './dto/create-product.dto'
 import { UpdateProductDto } from './dto/update-product.dto'
 import { PrismaService } from 'src/prisma/prisma.service'
+import { UpdateVariantOptionValueDto } from 'src/variant-option-value/dto/update-variant-option-value.dto'
 
 @Injectable()
 export class ProductService {
@@ -274,6 +275,62 @@ export class ProductService {
         return await this.prismaService.products.delete({
             where: {
                 id,
+            },
+        })
+    }
+
+    async removeBySKU(sku: string) {
+        return await this.prismaService.variantOptionValues.delete({
+            where: {
+                sku,
+            },
+        })
+    }
+
+    async removeManyBySKU(skus: string[]) {
+        return await this.prismaService.variantOptionValues.deleteMany({
+            where: {
+                sku: {
+                    in: skus,
+                },
+            },
+        })
+    }
+
+    async activedProductBySKU(sku: string, data: boolean) {
+        return await this.prismaService.variantOptionValues.update({
+            where: {
+                sku,
+            },
+            data: {
+                isActive: data,
+            },
+        })
+    }
+
+    async nonActivedManyBySKU(skus: string[]) {
+        return await this.prismaService.variantOptionValues.updateMany({
+            where: {
+                sku: {
+                    in: skus,
+                },
+            },
+            data: {
+                isActive: false,
+            },
+        })
+    }
+
+    async updateProductBySKU(sku: string, data: UpdateVariantOptionValueDto) {
+        return await this.prismaService.variantOptionValues.update({
+            where: {
+                sku,
+            },
+            data: {
+                sku: data.sku,
+                price: data.price,
+                stock: data.stock,
+                isActive: JSON.parse(data.isActive),
             },
         })
     }

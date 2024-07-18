@@ -7,6 +7,10 @@ export class CreateOrderDto {
   @IsNumber()
   serviceCharge: number;
 
+  //TODO: courier charge
+
+  //TODO: receiverEmail
+
   @IsString()
   status: string;
 

@@ -1,125 +1,130 @@
-import { Injectable } from "@nestjs/common";
-import { CreateOrderDto } from "./dto/create-order.dto";
-import { UpdateOrderDto } from "./dto/update-order.dto";
-import { PrismaService } from "src/prisma/prisma.service";
-import { Invoice } from "src/types/invoice-type";
-import { Midtrans } from "@miwone/midtrans-client-typescript";
+import { Injectable } from '@nestjs/common'
+import { CreateOrderDto } from './dto/create-order.dto'
+import { UpdateOrderDto } from './dto/update-order.dto'
+import { PrismaService } from 'src/prisma/prisma.service'
+import invoiceCreator from 'src/utils/InvoiceCreator'
+import { CartService } from 'src/cart/cart.service'
+import { MidtransService } from 'src/midtrans/midtrans.service'
 
 @Injectable()
 export class OrderService {
-  constructor(private readonly prismaService: PrismaService) {}
-  async create(createOrderDto: CreateOrderDto) {
-    const invoice = await this.prismaService.invoices.create({
-      data: createOrderDto,
-    });
+    constructor(
+        private readonly prismaService: PrismaService,
+        private readonly cartService: CartService,
+        private readonly midtransService: MidtransService
+    ) {}
 
-    const snap = new Midtrans.Snap({
-      clientKey: process.env.MIDTRANS_CLIENT_KEY,
-      serverKey: process.env.MIDTRANS_SECRET_KEY,
-      isProduction: false,
-    });
+    async create(createOrderDto: CreateOrderDto) {
+        const cart = await this.cartService.findOne(createOrderDto.cartId)
 
-    const transactionParameter = {
-      transaction_details: {
-        order_id: invoice.id,
-        gross_amount: createOrderDto.price + createOrderDto.serviceCharge,
-      },
-      credit_card: {
-        secure: true,
-      },
-      customer_details: {
-        first_name: createOrderDto.receiverName,
-        last_name: "",
-        phone: createOrderDto.receiverPhone,
-        billing_address: {
-          address: createOrderDto.receiverAddress,
-        },
-      },
-    };
-
-    const transaction = await snap.createTransaction(transactionParameter);
-
-    return transaction;
-  }
-
-  async findAll() {
-    return await this.prismaService.invoices.findMany({
-      include: {
-        carts: {
-          include: {
-            cartItems: {
-              include: {
-                variantOptionValues: {
-                  include: {
-                    variantOptions: {
-                      include: {
-                        variant: {
-                          include: {
-                            products: true,
-                          },
-                        },
-                      },
-                    },
-                  },
-                },
-              },
+        const invoice = await this.prismaService.invoices.create({
+            data: {
+                ...createOrderDto,
+                price: cart.price + createOrderDto.serviceCharge,
+                invoiceNumber: invoiceCreator(),
             },
-          },
-        },
-      },
-    });
-  }
+        })
 
-  async findOne(id: number) {
-    const rawInvoice = await this.prismaService.invoices.findFirst({
-      where: {
-        id,
-      },
-      include: {
-        carts: {
-          include: {
-            cartItems: {
-              include: {
-                variantOptionValues: {
-                  include: {
-                    variantOptions: {
-                      include: {
-                        variant: {
-                          include: {
-                            products: true,
-                          },
-                        },
-                      },
-                    },
-                  },
-                },
-              },
+        return await this.midtransService.create({
+            transaction_details: {
+                order_id: invoice.invoiceNumber,
+                gross_amount: invoice.price,
             },
-          },
-        },
-      },
-    });
+            customer_detail: {
+                first_name: createOrderDto.receiverName,
+                last_name: createOrderDto.receiverName,
+                email: createOrderDto.receiverEmail,
+                phone: +createOrderDto.receiverPhone,
+            },
+        })
+    }
 
-    return {
-      ...rawInvoice,
-      receiverPhone: rawInvoice.receiverPhone.toString(),
-    };
-  }
+    async findAll() {
+        return await this.prismaService.invoices.findMany({
+            include: {
+                carts: {
+                    include: {
+                        cartItems: {
+                            include: {
+                                variantOptionValues: {
+                                    include: {
+                                        variantOptions: {
+                                            include: {
+                                                variant: {
+                                                    include: {
+                                                        products: true,
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        })
+    }
 
-  update(id: number, updateOrderDto: UpdateOrderDto) {
-    return this.prismaService.invoices.update({
-      where: {
-        id,
-      },
-      data: updateOrderDto,
-    });
-  }
+    async findOne(id: number) {
+        const rawInvoice = await this.prismaService.invoices.findFirst({
+            where: {
+                id,
+            },
+            include: {
+                carts: {
+                    include: {
+                        cartItems: {
+                            include: {
+                                variantOptionValues: {
+                                    include: {
+                                        variantOptions: {
+                                            include: {
+                                                variant: {
+                                                    include: {
+                                                        products: true,
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        })
 
-  remove(id: number) {
-    return this.prismaService.invoices.delete({
-      where: {
-        id,
-      },
-    });
-  }
+        return {
+            ...rawInvoice,
+            receiverPhone: rawInvoice.receiverPhone.toString(),
+        }
+    }
+
+    async findOneByInvoiceNumber(invoiceNumber: string) {
+        return await this.prismaService.invoices.findFirst({
+            where: {
+                invoiceNumber,
+            },
+        })
+    }
+
+    update(id: number, updateOrderDto: UpdateOrderDto) {
+        return this.prismaService.invoices.update({
+            where: {
+                id,
+            },
+            data: updateOrderDto,
+        })
+    }
+
+    remove(id: number) {
+        return this.prismaService.invoices.delete({
+            where: {
+                id,
+            },
+        })
+    }
 }

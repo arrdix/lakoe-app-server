@@ -9,7 +9,10 @@ export class CartService {
 
     async create(createCartDto: CreateCartDto) {
         return await this.prismaService.carts.create({
-            data: createCartDto,
+            data: {
+                ...createCartDto,
+                price: createCartDto.price || 0,
+            },
         })
     }
 

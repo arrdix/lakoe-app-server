@@ -18,6 +18,22 @@ export class CartController {
         return res.status(200).json(response)
     }
 
+    @Get('/uncomplete/:storeId')
+    async findOneUncomplete(@Param('storeId') storeId: number, @Res() res: Response) {
+        const loggedUserId = res.locals.user.id
+        const response = await this.cartService.findOneUncomplete(loggedUserId, +storeId)
+
+        return res.status(200).json(response)
+    }
+
+    @Get('/uncomplete')
+    async findAllUncomplete(@Res() res: Response) {
+        const loggedUserId = res.locals.user.id
+        const response = await this.cartService.findAllUncomplete(loggedUserId)
+
+        return res.status(200).json(response)
+    }
+
     @Get(':id')
     findOne(@Param('id') id: string) {
         return this.cartService.findOne(+id)

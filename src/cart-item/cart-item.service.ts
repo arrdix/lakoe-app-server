@@ -34,12 +34,41 @@ export class CartItemService {
             price: requestedCart.price + totalPrice,
         })
 
+        const variantOptionValue = await this.prismaService.variantOptionValues.findFirst({
+            where: {
+                sku: createCartItemDto.sku,
+            },
+        })
+
         delete createCartItemDto.sku
+
+        const cartItem = await this.prismaService.cartItems.findFirst({
+            where: {
+                userId: createCartItemDto.userId,
+                storeId: createCartItemDto.storeId,
+                variantOptionValueId: variantOptionValue.id,
+            },
+        })
+
+        if (cartItem) {
+            return this.prismaService.cartItems.update({
+                where: {
+                    id: cartItem.id,
+                },
+                data: {
+                    qty: cartItem.id + createCartItemDto.qty,
+                },
+            })
+        }
+
         return this.prismaService.cartItems.create({
             data: {
                 ...createCartItemDto,
                 price: totalPrice,
                 variantOptionValueId: requestedProduct.id,
+            },
+            include: {
+                variantOptionValues: true,
             },
         })
 
@@ -66,6 +95,14 @@ export class CartItemService {
         //         cartId,
         //     },
         // })
+    }
+
+    async count(userId: number) {
+        return await this.prismaService.cartItems.count({
+            where: {
+                userId,
+            },
+        })
     }
 
     async findOne(id: number) {

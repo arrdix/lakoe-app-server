@@ -48,9 +48,10 @@ model Profile {
 }
 
 model Carts {
-  id       Int @id @default(autoincrement())
-  price    Int
-  discount Int
+  id         Int     @id @default(autoincrement())
+  price      Int
+  discount   Int
+  isComplete Boolean @default(false)
 
   users   Users?  @relation(fields: [userId], references: [id])
   userId  Int?

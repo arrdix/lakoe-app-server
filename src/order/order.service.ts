@@ -5,17 +5,31 @@ import { PrismaService } from 'src/prisma/prisma.service'
 import invoiceCreator from 'src/utils/InvoiceCreator'
 import { CartService } from 'src/cart/cart.service'
 import { MidtransService } from 'src/midtrans/midtrans.service'
+import { VariantOptionValueService } from 'src/variant-option-value/variant-option-value.service'
 
 @Injectable()
 export class OrderService {
     constructor(
         private readonly prismaService: PrismaService,
         private readonly cartService: CartService,
-        private readonly midtransService: MidtransService
+        private readonly midtransService: MidtransService,
+        private readonly variantOptionValueService: VariantOptionValueService
     ) {}
 
     async create(createOrderDto: CreateOrderDto) {
         const cart = await this.cartService.findOne(createOrderDto.cartId)
+
+        cart.cartItems.map((cartItem) => {
+            // cart item price divied by product price
+            const orderQty = cartItem.price / cartItem.variantOptionValues.price
+            const targetId = cartItem.variantOptionValueId
+
+            this.variantOptionValueService.updateStock(targetId, orderQty)
+        })
+
+        await this.cartService.update(cart.id, {
+            isComplete: true,
+        })
 
         const invoice = await this.prismaService.invoices.create({
             data: {

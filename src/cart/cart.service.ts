@@ -22,7 +22,44 @@ export class CartService {
                 id,
             },
             include: {
-                cartItems: true,
+                cartItems: {
+                    include: {
+                        variantOptionValues: true,
+                    },
+                },
+            },
+        })
+    }
+
+    async findOneUncomplete(userId: number, storeId: number) {
+        return await this.prismaService.carts.findFirst({
+            where: {
+                userId: userId,
+                isComplete: false,
+                storeId: storeId,
+            },
+            include: {
+                cartItems: {
+                    include: {
+                        variantOptionValues: true,
+                    },
+                },
+            },
+        })
+    }
+
+    async findAllUncomplete(userId: number) {
+        return await this.prismaService.carts.findMany({
+            where: {
+                userId: userId,
+                isComplete: false,
+            },
+            include: {
+                cartItems: {
+                    include: {
+                        variantOptionValues: true,
+                    },
+                },
             },
         })
     }

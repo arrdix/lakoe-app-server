@@ -1,6 +1,4 @@
 import { Injectable } from '@nestjs/common'
-import { CreateVariantOptionValueDto } from './dto/create-variant-option-value.dto'
-import { UpdateVariantOptionValueDto } from './dto/update-variant-option-value.dto'
 import { PrismaService } from 'src/prisma/prisma.service'
 
 @Injectable()
@@ -15,23 +13,27 @@ export class VariantOptionValueService {
         })
     }
 
-    create(createVariantOptionValueDto: CreateVariantOptionValueDto) {
-        return 'This action adds a new variantOptionValue'
-    }
+    async updateStock(id: number, qty: number) {
+        const requestedVariantOptionValue = await this.prismaService.variantOptionValues.findFirst({
+            where: {
+                id,
+            },
+        })
 
-    findAll() {
-        return `This action returns all variantOptionValue`
-    }
+        console.log(requestedVariantOptionValue.stock)
+        console.log(qty)
 
-    findOne(id: number) {
-        return `This action returns a #${id} variantOptionValue`
-    }
+        console.log(typeof requestedVariantOptionValue.stock)
+        console.log(typeof qty)
+        const updatedStock = requestedVariantOptionValue.stock - qty
 
-    update(id: number, updateVariantOptionValueDto: UpdateVariantOptionValueDto) {
-        return `This action updates a #${id} variantOptionValue`
-    }
-
-    remove(id: number) {
-        return `This action removes a #${id} variantOptionValue`
+        return this.prismaService.variantOptionValues.update({
+            where: {
+                id,
+            },
+            data: {
+                stock: updatedStock,
+            },
+        })
     }
 }

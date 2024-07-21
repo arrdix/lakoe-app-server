@@ -11,6 +11,7 @@ import { VariantOptionModule } from "./variant-option/variant-option.module";
 import { VariantOptionValueModule } from "./variant-option-value/variant-option-value.module";
 import { AuthModule } from "./auth/auth.module";
 import { CloudinaryModule } from "src/cloudinary/cloudinary.module";
+import { BiteshipModule } from './biteship/biteship.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { CloudinaryModule } from "src/cloudinary/cloudinary.module";
     VariantOptionValueModule,
     AuthModule,
     CloudinaryModule,
+    BiteshipModule,
   ],
   controllers: [],
   providers: [],

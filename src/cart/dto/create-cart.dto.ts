@@ -1,15 +1,21 @@
-import { IsNumber } from 'class-validator'
+import { IsBoolean, IsNumber, IsOptional } from 'class-validator'
 
 export class CreateCartDto {
     @IsNumber()
-    price: number
+    @IsOptional()
+    price?: number
 
     @IsNumber()
     discount: number
 
     @IsNumber()
-    userId: number
+    @IsOptional()
+    userId?: number
 
     @IsNumber()
     storeId: number
+
+    @IsBoolean()
+    @IsOptional()
+    isComplete?: boolean
 }

@@ -152,6 +152,7 @@ async function main() {
                 url: 'example.com',
                 isActive: true,
                 categoryId: 666,
+                storeId: 666,
             },
             {
                 id: 667,
@@ -166,6 +167,7 @@ async function main() {
                 url: 'example2.com',
                 isActive: true,
                 categoryId: 666,
+                storeId: 666,
             },
             {
                 id: 668,
@@ -183,6 +185,7 @@ async function main() {
                 url: 'example3.com',
                 isActive: true,
                 categoryId: 666,
+                storeId: 666,
             },
         ]
 
@@ -401,6 +404,54 @@ async function main() {
             })
         }
 
+        const couriers = [
+            {
+                id: 666,
+                courierCode: 'EXAMPLE_COURIER_CODE_1',
+                courierServiceCode: 'EXAMPLE_SERVICE_GJK_1',
+                courierServiceName: 'EXAMPLE_GOJEK_1',
+                price: 21000,
+            },
+            {
+                id: 667,
+                courierCode: 'EXAMPLE_COURIER_CODE_2',
+                courierServiceCode: 'EXAMPLE_SERVICE_GJK_2',
+                courierServiceName: 'EXAMPLE_GOJEK_2',
+                price: 21000,
+            },
+            {
+                id: 668,
+                courierCode: 'EXAMPLE_COURIER_CODE_3',
+                courierServiceCode: 'EXAMPLE_SERVICE_GJK_3',
+                courierServiceName: 'EXAMPLE_GOJEK_3',
+                price: 21000,
+            },
+            {
+                id: 669,
+                courierCode: 'EXAMPLE_COURIER_CODE_4',
+                courierServiceCode: 'EXAMPLE_SERVICE_GJK_4',
+                courierServiceName: 'EXAMPLE_GOJEK_4',
+                price: 21000,
+            },
+            {
+                id: 670,
+                courierCode: 'EXAMPLE_COURIER_CODE_5',
+                courierServiceCode: 'EXAMPLE_SERVICE_GJK_5',
+                courierServiceName: 'EXAMPLE_GOJEK_5',
+                price: 21000,
+            },
+        ]
+
+        for (const courier of couriers) {
+            await prisma.couriers.upsert({
+                where: {
+                    id: courier.id,
+                },
+                update: {},
+                create: courier,
+            })
+        }
+
         // Invoices
         const invoices = [
             {
@@ -416,7 +467,9 @@ async function main() {
                 receiverLongtitude: 3.321321321,
                 receiverVillage: 'Cikeas Udik',
                 receiverPhone: '6281081081081',
+                receiverEmail: 'example1@gmail.com',
                 cartId: 666,
+                courierId: 666,
                 userId: 999,
             },
             {
@@ -432,7 +485,9 @@ async function main() {
                 receiverLongtitude: 4.321321321,
                 receiverVillage: 'Cikeas Udik',
                 receiverPhone: '6281081081082',
+                receiverEmail: 'example2@gmail.com',
                 cartId: 667,
+                courierId: 667,
                 userId: 999,
             },
             {
@@ -448,7 +503,9 @@ async function main() {
                 receiverLongtitude: 5.321321321,
                 receiverVillage: 'Cikeas Udik',
                 receiverPhone: '6281081081083',
+                receiverEmail: 'example3@gmail.com',
                 cartId: 668,
+                courierId: 668,
                 userId: 999,
             },
             {
@@ -464,7 +521,9 @@ async function main() {
                 receiverLongtitude: 6.321321321,
                 receiverVillage: 'Cikeas Udik',
                 receiverPhone: '6281081081084',
+                receiverEmail: 'example4@gmail.com',
                 cartId: 669,
+                courierId: 669,
                 userId: 999,
             },
             {
@@ -480,7 +539,9 @@ async function main() {
                 receiverLongtitude: 7.321321321,
                 receiverVillage: 'Cikeas Udik',
                 receiverPhone: '6281081081085',
+                receiverEmail: 'example5@gmail.com',
                 cartId: 670,
+                courierId: 670,
                 userId: 999,
             },
         ]

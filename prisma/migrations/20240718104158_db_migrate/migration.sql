@@ -61,10 +61,12 @@ CREATE TABLE "Invoices" (
     "receiverLatitude" DOUBLE PRECISION NOT NULL,
     "receiverLongtitude" DOUBLE PRECISION NOT NULL,
     "receiverDistrict" TEXT NOT NULL,
+    "receiverVillage" TEXT NOT NULL,
     "receiverPhone" TEXT,
     "receiverAddress" TEXT NOT NULL,
     "receiverName" TEXT NOT NULL,
     "invoiceNumber" TEXT NOT NULL,
+    "notes" TEXT,
     "cartId" INTEGER,
     "userId" INTEGER,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -278,6 +280,9 @@ CREATE UNIQUE INDEX "Variants_productId_key" ON "Variants"("productId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "VariantOptions_variantOptionValuesId_key" ON "VariantOptions"("variantOptionValuesId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "VariantOptionValues_sku_key" ON "VariantOptionValues"("sku");
 
 -- AddForeignKey
 ALTER TABLE "Users" ADD CONSTRAINT "Users_role_fkey" FOREIGN KEY ("role") REFERENCES "Roles"("name") ON DELETE SET NULL ON UPDATE CASCADE;

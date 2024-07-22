@@ -7,6 +7,10 @@ export class CreateOrderDto {
   @IsNumber()
   serviceCharge: number;
 
+  //TODO: courier charge
+
+  //TODO: receiverEmail
+
   @IsString()
   status: string;
 
@@ -20,6 +24,9 @@ export class CreateOrderDto {
   receiverDistrict: string;
 
   @IsString()
+  receiverVillage: string;
+
+  @IsString()
   receiverPhone: string;
 
   @IsString()
@@ -27,6 +34,9 @@ export class CreateOrderDto {
 
   @IsString()
   receiverName: string;
+
+  @IsString()
+  notes: string;
 
   @IsString()
   invoiceNumber: string;

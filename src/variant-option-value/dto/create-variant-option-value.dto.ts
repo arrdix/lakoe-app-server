@@ -15,5 +15,5 @@ export class CreateVariantOptionValueDto {
 
     @IsOptional()
     @IsBoolean()
-    isActive: boolean
+    isActive: string
 }

@@ -62,7 +62,7 @@ model Carts {
   invoices  Invoices[]
 }
 
-model CartItems {
+model CartItems {   
   id    Int @id @default(autoincrement())
   qty   Int
   price Int
@@ -153,7 +153,6 @@ model Stores {
   domain           String
   logoAttachment   String
   bannerAttachment String
-
   carts              Carts[]
   cartItems          CartItems[]
   products           Products[]

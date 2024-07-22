@@ -33,6 +33,7 @@ CREATE TABLE "Carts" (
     "id" SERIAL NOT NULL,
     "price" INTEGER NOT NULL,
     "discount" INTEGER NOT NULL,
+    "isComplete" BOOLEAN NOT NULL DEFAULT false,
     "userId" INTEGER,
     "storeId" INTEGER,
 
@@ -65,10 +66,12 @@ CREATE TABLE "Invoices" (
     "receiverPhone" TEXT,
     "receiverAddress" TEXT NOT NULL,
     "receiverName" TEXT NOT NULL,
+    "receiverEmail" TEXT NOT NULL,
     "invoiceNumber" TEXT NOT NULL,
     "notes" TEXT,
     "cartId" INTEGER,
     "userId" INTEGER,
+    "courierId" INTEGER,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -101,7 +104,6 @@ CREATE TABLE "Payments" (
     "bank" TEXT NOT NULL,
     "amount" INTEGER NOT NULL,
     "status" TEXT NOT NULL,
-    "mootaTransactionId" INTEGER NOT NULL,
     "invoiceId" INTEGER NOT NULL,
 
     CONSTRAINT "Payments_pkey" PRIMARY KEY ("id")
@@ -114,8 +116,6 @@ CREATE TABLE "Couriers" (
     "courierServiceName" TEXT NOT NULL,
     "courierServiceCode" TEXT NOT NULL,
     "price" INTEGER NOT NULL,
-    "orderId" INTEGER NOT NULL,
-    "invoiceId" INTEGER NOT NULL,
 
     CONSTRAINT "Couriers_pkey" PRIMARY KEY ("id")
 );
@@ -264,13 +264,13 @@ CREATE UNIQUE INDEX "Roles_name_key" ON "Roles"("name");
 CREATE UNIQUE INDEX "Profile_userId_key" ON "Profile"("userId");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Invoices_courierId_key" ON "Invoices"("courierId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "ConfirmationPayment_invoiceId_key" ON "ConfirmationPayment"("invoiceId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Payments_invoiceId_key" ON "Payments"("invoiceId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Couriers_invoiceId_key" ON "Couriers"("invoiceId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Products_url_key" ON "Products"("url");
@@ -315,6 +315,9 @@ ALTER TABLE "Invoices" ADD CONSTRAINT "Invoices_cartId_fkey" FOREIGN KEY ("cartI
 ALTER TABLE "Invoices" ADD CONSTRAINT "Invoices_userId_fkey" FOREIGN KEY ("userId") REFERENCES "Users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "Invoices" ADD CONSTRAINT "Invoices_courierId_fkey" FOREIGN KEY ("courierId") REFERENCES "Couriers"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "ConfirmationPayment" ADD CONSTRAINT "ConfirmationPayment_invoiceId_fkey" FOREIGN KEY ("invoiceId") REFERENCES "Invoices"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -322,9 +325,6 @@ ALTER TABLE "InvoiceHistories" ADD CONSTRAINT "InvoiceHistories_invoiceId_fkey" 
 
 -- AddForeignKey
 ALTER TABLE "Payments" ADD CONSTRAINT "Payments_invoiceId_fkey" FOREIGN KEY ("invoiceId") REFERENCES "Invoices"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Couriers" ADD CONSTRAINT "Couriers_invoiceId_fkey" FOREIGN KEY ("invoiceId") REFERENCES "Invoices"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "StoreOnDecorations" ADD CONSTRAINT "StoreOnDecorations_decorationId_fkey" FOREIGN KEY ("decorationId") REFERENCES "Decorations"("id") ON DELETE SET NULL ON UPDATE CASCADE;

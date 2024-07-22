@@ -50,6 +50,8 @@ export class AppModule implements NestModule {
                 { path: '/product/sku/:sku', method: RequestMethod.GET },
                 { path: '/payment', method: RequestMethod.POST },
                 { path: '/payment/finish', method: RequestMethod.GET }
+                // { path: '/cart/uncomplete', method: RequestMethod.GET },
+                // { path: '/cart-item/count', method: RequestMethod.GET }
             )
             .forRoutes({ path: '*', method: RequestMethod.ALL })
     }

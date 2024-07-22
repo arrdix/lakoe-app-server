@@ -1,104 +1,104 @@
-import { PrismaClient } from '@prisma/client'
-const prisma = new PrismaClient()
-import * as bcrypt from 'bcrypt'
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
+import * as bcrypt from "bcrypt";
 
 async function main() {
-    await prisma.$transaction(async () => {
+    await prisma.$transaction(async (tx) => {
         await prisma.roles.upsert({
             where: { id: 666 },
             update: {},
             create: {
                 id: 666,
-                name: 'SELLER',
+                name: "SELLER",
             },
-        })
+        });
 
         await prisma.roles.upsert({
             where: { id: 999 },
             update: {},
             create: {
                 id: 999,
-                name: 'BUYER',
+                name: "BUYER",
             },
-        })
+        });
 
         await prisma.users.upsert({
-            where: { email: 'seller@lakoe.com' },
+            where: { email: "seller@lakoe.com" },
             update: {},
             create: {
                 id: 666,
-                name: 'Seller',
-                email: 'seller@lakoe.com',
-                phone: '6281081081081',
-                password: await bcrypt.hash('seller', 10),
-                role: 'SELLER',
+                name: "Seller",
+                email: "seller@lakoe.com",
+                phone: "6281081081081",
+                password: await bcrypt.hash("seller", 10),
+                role: "SELLER",
             },
-        })
+        });
 
         await prisma.users.upsert({
-            where: { email: 'buyer1@lakoe.com' },
+            where: { email: "buyer1@lakoe.com" },
             update: {},
             create: {
                 id: 999,
-                name: 'Buyer 1',
-                email: 'buyer1@lakoe.com',
-                phone: '6281081081081',
-                password: await bcrypt.hash('buyer1', 10),
-                role: 'BUYER',
+                name: "Buyer 1",
+                email: "buyer1@lakoe.com",
+                phone: "6281081081081",
+                password: await bcrypt.hash("buyer1", 10),
+                role: "BUYER",
             },
-        })
+        });
 
         await prisma.users.upsert({
-            where: { email: 'buyer2@lakoe.com' },
+            where: { email: "buyer2@lakoe.com" },
             update: {},
             create: {
                 id: 998,
-                name: 'Buyer 2',
-                email: 'buyer2@lakoe.com',
-                phone: '6281081081081',
-                password: await bcrypt.hash('buyer2', 10),
-                role: 'BUYER',
+                name: "Buyer 2",
+                email: "buyer2@lakoe.com",
+                phone: "6281081081081",
+                password: await bcrypt.hash("buyer2", 10),
+                role: "BUYER",
             },
-        })
+        });
 
         await prisma.users.upsert({
-            where: { email: 'buyer3@lakoe.com' },
+            where: { email: "buyer3@lakoe.com" },
             update: {},
             create: {
                 id: 997,
-                name: 'Buyer 3',
-                email: 'buyer3@lakoe.com',
-                phone: '6281081081081',
-                password: await bcrypt.hash('buyer3', 10),
-                role: 'BUYER',
+                name: "Buyer 3",
+                email: "buyer3@lakoe.com",
+                phone: "6281081081081",
+                password: await bcrypt.hash("buyer3", 10),
+                role: "BUYER",
             },
-        })
+        });
 
         await prisma.users.upsert({
-            where: { email: 'buyer4@lakoe.com' },
+            where: { email: "buyer4@lakoe.com" },
             update: {},
             create: {
                 id: 996,
-                name: 'Buyer 4',
-                email: 'buyer4@lakoe.com',
-                phone: '6281081081081',
-                password: await bcrypt.hash('buyer4', 10),
-                role: 'BUYER',
+                name: "Buyer 4",
+                email: "buyer4@lakoe.com",
+                phone: "6281081081081",
+                password: await bcrypt.hash("buyer4", 10),
+                role: "BUYER",
             },
-        })
+        });
 
         await prisma.users.upsert({
-            where: { email: 'buyer5@lakoe.com' },
+            where: { email: "buyer5@lakoe.com" },
             update: {},
             create: {
                 id: 995,
-                name: 'Buyer 5',
-                email: 'buyer5@lakoe.com',
-                phone: '6281081081081',
-                password: await bcrypt.hash('buyer5', 10),
-                role: 'BUYER',
+                name: "Buyer 5",
+                email: "buyer5@lakoe.com",
+                phone: "6281081081081",
+                password: await bcrypt.hash("buyer5", 10),
+                role: "BUYER",
             },
-        })
+        });
 
         const categories = [
             { id: 666, name: 'Hoodie' },
@@ -210,9 +210,9 @@ async function main() {
             update: {},
             create: {
                 id: 666,
-                name: 'Pakaian',
+                name: "Pakaian",
             },
-        })
+        });
 
         // Stores
         await prisma.stores.upsert({
@@ -220,14 +220,14 @@ async function main() {
             update: {},
             create: {
                 id: 666,
-                name: 'Lakoe Store',
-                slogan: 'Slogan Lakoe',
-                description: 'Desc lakoe',
-                domain: 'example.com',
-                logoAttachment: 'example.jpg',
-                bannerAttachment: 'example.jpg',
+                name: "Lakoe Store",
+                slogan: "Slogan Lakoe",
+                description: "Desc lakoe",
+                domain: "example.com",
+                logoAttachment: "example.jpg",
+                bannerAttachment: "example.jpg",
             },
-        })
+        });
 
         await prisma.profile.upsert({
             where: { id: 666 },
@@ -236,92 +236,92 @@ async function main() {
                 id: 666,
                 userId: 666,
             },
-        })
+        });
 
         // Products
+        const productIds = [666, 667, 668, 669, 670];
         const products = [
             {
                 id: 666,
-                name: 'Kaos Polos Pria Cotton Combed 32s',
-                description:
-                    'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-                attachments: [
-                    'http://res.cloudinary.com/dv8vfur0m/image/upload/v1721313212/dr0houftw6wu7znsnct1.jpg',
-                    'http://res.cloudinary.com/dv8vfur0m/image/upload/v1721313213/t1xr9jd1nh67ox5vdrtq.jpg',
-                    'http://res.cloudinary.com/dv8vfur0m/image/upload/v1721313214/wlzunhyzthwjbdkuouxb.jpg',
-                    'http://res.cloudinary.com/dv8vfur0m/image/upload/v1721313215/uyadduvivb0egh6pr7xb.jpg',
-                    'http://res.cloudinary.com/dv8vfur0m/image/upload/v1721313216/x5vcxiktmiqc5jafnc8d.jpg',
-                ],
+                name: "Kaos Polos",
+                description: "Deskripsi kaos polos",
+                attachments: ["example.jpg"],
                 minimumOrder: 1,
-                url: 'example.com',
+                url: "example.com",
                 isActive: true,
                 categoryId: 666,
-                storeId: 666,
             },
             {
                 id: 667,
-                name: 'Kaos Polos Wanita Cotton Combed 24s',
-                description:
-                    'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-                attachments: [
-                    'http://res.cloudinary.com/dv8vfur0m/image/upload/v1721313213/t1xr9jd1nh67ox5vdrtq.jpg',
-                    'http://res.cloudinary.com/dv8vfur0m/image/upload/v1721313216/x5vcxiktmiqc5jafnc8d.jpg',
-                ],
+                name: "Celana Jeans",
+                description: "Deskripsi celana jeans",
+                attachments: ["example2.jpg"],
                 minimumOrder: 1,
-                url: 'example2.com',
+                url: "example2.com",
                 isActive: true,
                 categoryId: 666,
-                storeId: 666,
             },
             {
                 id: 668,
-                name: 'Nike Dunk Low Black White Panda GS',
-                description:
-                    'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-                attachments: [
-                    'http://res.cloudinary.com/dv8vfur0m/image/upload/v1721314497/flxqcwbwv2yycraulfwa.jpg',
-                    'http://res.cloudinary.com/dv8vfur0m/image/upload/v1721314495/qirak47ay3srjc8du8jv.jpg',
-                    'http://res.cloudinary.com/dv8vfur0m/image/upload/v1721314498/qfoizmniixtfh6l9jlp6.jpg',
-                    'http://res.cloudinary.com/dv8vfur0m/image/upload/v1721314498/z6vww7jwmft8khd0bbnx.jpg',
-                    'http://res.cloudinary.com/dv8vfur0m/image/upload/v1721314500/knm0blqajswfzipz7gxt.jpg',
-                ],
+                name: "Jaket Kulit",
+                description: "Deskripsi jaket kulit",
+                attachments: ["example3.jpg"],
                 minimumOrder: 1,
-                url: 'example3.com',
+                url: "example3.com",
                 isActive: true,
                 categoryId: 666,
-                storeId: 666,
             },
-        ]
+            {
+                id: 669,
+                name: "Sepatu Sneakers",
+                description: "Deskripsi sepatu sneakers",
+                attachments: ["example4.jpg"],
+                minimumOrder: 1,
+                url: "example4.com",
+                isActive: true,
+                categoryId: 666,
+            },
+            {
+                id: 670,
+                name: "Topi Baseball",
+                description: "Deskripsi topi baseball",
+                attachments: ["example5.jpg"],
+                minimumOrder: 1,
+                url: "example5.com",
+                isActive: true,
+                categoryId: 666,
+            },
+        ];
 
         for (const product of products) {
             await prisma.products.upsert({
                 where: { id: product.id },
                 update: {},
                 create: product,
-            })
+            });
         }
 
         // Variant Option Values
         const variantOptionValues = [
             {
                 id: 666,
-                sku: 'SKU_HITAM_EXAMPLE',
-                price: 49000,
+                sku: "SKU_HITAM_EXAMPLE",
+                price: 69000,
                 stock: 100,
                 weight: 500,
                 isActive: true,
             },
             {
                 id: 667,
-                sku: 'SKU_MERAH_EXAMPLE',
-                price: 90000,
+                sku: "SKU_MERAH_EXAMPLE",
+                price: 75000,
                 stock: 100,
                 weight: 500,
                 isActive: true,
             },
             {
                 id: 668,
-                sku: 'SKU_BIRU_EXAMPLE',
+                sku: "SKU_BIRU_EXAMPLE",
                 price: 70000,
                 stock: 100,
                 weight: 500,
@@ -329,109 +329,62 @@ async function main() {
             },
             {
                 id: 669,
-                sku: 'SKU_HIJAU_EXAMPLE',
-                price: 79000,
+                sku: "SKU_HIJAU_EXAMPLE",
+                price: 72000,
                 stock: 100,
                 weight: 500,
                 isActive: true,
             },
             {
                 id: 670,
-                sku: 'SKU_PUTIH_EXAMPLE',
-                price: 61000,
+                sku: "SKU_PUTIH_EXAMPLE",
+                price: 71000,
                 stock: 100,
                 weight: 500,
                 isActive: true,
             },
-
-            {
-                id: 671,
-                sku: 'SKU_WOMEN_HIJAU_EXAMPLE',
-                price: 79000,
-                stock: 100,
-                weight: 500,
-                isActive: true,
-            },
-            {
-                id: 672,
-                sku: 'SKU_WOMEN_PUTIH_EXAMPLE',
-                price: 61000,
-                stock: 100,
-                weight: 500,
-                isActive: true,
-            },
-
-            {
-                id: 673,
-                sku: 'SKU_NIKE_S_EXAMPLE',
-                price: 120000,
-                stock: 100,
-                weight: 500,
-                isActive: true,
-            },
-            {
-                id: 674,
-                sku: 'SKU_NIKE_M_EXAMPLE',
-                price: 130000,
-                stock: 100,
-                weight: 500,
-                isActive: true,
-            },
-            {
-                id: 675,
-                sku: 'SKU_NIKE_L_EXAMPLE',
-                price: 99000,
-                stock: 100,
-                weight: 500,
-                isActive: true,
-            },
-        ]
+        ];
 
         for (const optionValue of variantOptionValues) {
             await prisma.variantOptionValues.upsert({
                 where: { id: optionValue.id },
                 update: {},
                 create: optionValue,
-            })
+            });
         }
 
         // Variants
         const variants = [
-            { id: 666, name: 'Warna', isActive: true, productId: 666 },
-            { id: 667, name: 'Warna', isActive: true, productId: 667 },
-            { id: 668, name: 'Ukuran', isActive: true, productId: 668 },
-        ]
+            { id: 666, name: "Warna", isActive: true, productId: 666 },
+            { id: 667, name: "Ukuran", isActive: true, productId: 667 },
+            { id: 668, name: "Bahan", isActive: true, productId: 668 },
+            { id: 669, name: "Desain", isActive: true, productId: 669 },
+            { id: 670, name: "Tipe", isActive: true, productId: 670 },
+        ];
 
         for (const variant of variants) {
             await prisma.variants.upsert({
                 where: { id: variant.id },
                 update: {},
                 create: variant,
-            })
+            });
         }
 
         // Variant Options
         const variantOptions = [
-            { id: 666, name: 'HITAM', variantId: 666, variantOptionValuesId: 666 },
-            { id: 667, name: 'MERAH', variantId: 666, variantOptionValuesId: 667 },
-            { id: 668, name: 'BIRU', variantId: 666, variantOptionValuesId: 668 },
-            { id: 669, name: 'HIJAU', variantId: 666, variantOptionValuesId: 669 },
-            { id: 670, name: 'PUTIH', variantId: 666, variantOptionValuesId: 670 },
-
-            { id: 674, name: 'HIJAU', variantId: 667, variantOptionValuesId: 671 },
-            { id: 675, name: 'PUTIH', variantId: 667, variantOptionValuesId: 672 },
-
-            { id: 676, name: 'S', variantId: 668, variantOptionValuesId: 673 },
-            { id: 677, name: 'M', variantId: 668, variantOptionValuesId: 674 },
-            { id: 678, name: 'L', variantId: 668, variantOptionValuesId: 675 },
-        ]
+            { id: 666, name: "HITAM", variantId: 666, variantOptionValuesId: 666 },
+            { id: 667, name: "MERAH", variantId: 666, variantOptionValuesId: 667 },
+            { id: 668, name: "BIRU", variantId: 666, variantOptionValuesId: 668 },
+            { id: 669, name: "HIJAU", variantId: 666, variantOptionValuesId: 669 },
+            { id: 670, name: "PUTIH", variantId: 666, variantOptionValuesId: 670 },
+        ];
 
         for (const option of variantOptions) {
             await prisma.variantOptions.upsert({
                 where: { id: option.id },
                 update: {},
                 create: option,
-            })
+            });
         }
 
         // Carts
@@ -441,14 +394,14 @@ async function main() {
             { id: 668, price: 668000, discount: 30000, storeId: 666, userId: 997 },
             { id: 669, price: 669000, discount: 40000, storeId: 666, userId: 996 },
             { id: 670, price: 670000, discount: 50000, storeId: 666, userId: 995 },
-        ]
+        ];
 
         for (const cart of carts) {
             await prisma.carts.upsert({
                 where: { id: cart.id },
                 update: cart,
                 create: cart,
-            })
+            });
         }
 
         // Cart Items
@@ -498,172 +451,119 @@ async function main() {
                 variantOptionValueId: 670,
                 storeId: 666,
             },
-        ]
+        ];
 
         for (const item of cartItems) {
             await prisma.cartItems.upsert({
                 where: { id: item.id },
                 update: {},
                 create: item,
-            })
-        }
-
-        const couriers = [
-            {
-                id: 666,
-                courierCode: 'EXAMPLE_COURIER_CODE_1',
-                courierServiceCode: 'EXAMPLE_SERVICE_GJK_1',
-                courierServiceName: 'EXAMPLE_GOJEK_1',
-                price: 21000,
-            },
-            {
-                id: 667,
-                courierCode: 'EXAMPLE_COURIER_CODE_2',
-                courierServiceCode: 'EXAMPLE_SERVICE_GJK_2',
-                courierServiceName: 'EXAMPLE_GOJEK_2',
-                price: 21000,
-            },
-            {
-                id: 668,
-                courierCode: 'EXAMPLE_COURIER_CODE_3',
-                courierServiceCode: 'EXAMPLE_SERVICE_GJK_3',
-                courierServiceName: 'EXAMPLE_GOJEK_3',
-                price: 21000,
-            },
-            {
-                id: 669,
-                courierCode: 'EXAMPLE_COURIER_CODE_4',
-                courierServiceCode: 'EXAMPLE_SERVICE_GJK_4',
-                courierServiceName: 'EXAMPLE_GOJEK_4',
-                price: 21000,
-            },
-            {
-                id: 670,
-                courierCode: 'EXAMPLE_COURIER_CODE_5',
-                courierServiceCode: 'EXAMPLE_SERVICE_GJK_5',
-                courierServiceName: 'EXAMPLE_GOJEK_5',
-                price: 21000,
-            },
-        ]
-
-        for (const courier of couriers) {
-            await prisma.couriers.upsert({
-                where: {
-                    id: courier.id,
-                },
-                update: {},
-                create: courier,
-            })
+            });
         }
 
         // Invoices
         const invoices = [
             {
                 id: 666,
-                invoiceNumber: 'INV/666/MPL/666',
-                status: 'Belum Dibayar',
+                invoiceNumber: "INV/666/MPL/666",
+                status: "Belum Dibayar",
                 serviceCharge: 3500,
                 price: 666000,
-                receiverName: 'Buyer Lakoe 1',
-                receiverAddress: 'Jl. New York Timur no. 666',
-                receiverDistrict: 'Los Angeles',
+                receiverEmail: "a@a.com",
+                receiverName: "Buyer Lakoe 1",
+                receiverAddress: "Jl. New York Timur no. 666",
+                receiverDistrict: "Los Angeles",
                 receiverLatitude: 1.123123123,
                 receiverLongtitude: 3.321321321,
-                receiverVillage: 'Cikeas Udik',
-                receiverPhone: '6281081081081',
-                receiverEmail: 'example1@gmail.com',
+                receiverVillage: "Cikeas Udik",
+                receiverPhone: "6281081081081",
                 cartId: 666,
-                courierId: 666,
                 userId: 999,
             },
             {
                 id: 667,
-                invoiceNumber: 'INV/667/MPL/667',
-                status: 'Pesanan Baru',
+                invoiceNumber: "INV/667/MPL/667",
+                status: "Pesanan Baru",
                 serviceCharge: 4500,
                 price: 667000,
-                receiverName: 'Buyer Lakoe 2',
-                receiverAddress: 'Jl. New York Barat no. 667',
-                receiverDistrict: 'Los Angeles',
+                receiverEmail: "a@a.com",
+                receiverName: "Buyer Lakoe 2",
+                receiverAddress: "Jl. New York Barat no. 667",
+                receiverDistrict: "Los Angeles",
                 receiverLatitude: 2.123123123,
                 receiverLongtitude: 4.321321321,
-                receiverVillage: 'Cikeas Udik',
-                receiverPhone: '6281081081082',
-                receiverEmail: 'example2@gmail.com',
+                receiverVillage: "Cikeas Udik",
+                receiverPhone: "6281081081082",
                 cartId: 667,
-                courierId: 667,
                 userId: 999,
             },
             {
                 id: 668,
-                invoiceNumber: 'INV/668/MPL/668',
-                status: 'Siap Dikirim',
+                invoiceNumber: "INV/668/MPL/668",
+                status: "Siap Dikirim",
                 serviceCharge: 5500,
                 price: 668000,
-                receiverName: 'Buyer Lakoe 3',
-                receiverAddress: 'Jl. New York Selatan no. 668',
-                receiverDistrict: 'Los Angeles',
+                receiverEmail: "a@a.com",
+                receiverName: "Buyer Lakoe 3",
+                receiverAddress: "Jl. New York Selatan no. 668",
+                receiverDistrict: "Los Angeles",
                 receiverLatitude: 3.123123123,
                 receiverLongtitude: 5.321321321,
-                receiverVillage: 'Cikeas Udik',
-                receiverPhone: '6281081081083',
-                receiverEmail: 'example3@gmail.com',
+                receiverVillage: "Cikeas Udik",
+                receiverPhone: "6281081081083",
                 cartId: 668,
-                courierId: 668,
                 userId: 999,
             },
             {
                 id: 669,
-                invoiceNumber: 'INV/669/MPL/669',
-                status: 'Dalam Pengiriman',
+                invoiceNumber: "INV/669/MPL/669",
+                status: "Dalam Pengiriman",
                 serviceCharge: 6500,
                 price: 669000,
-                receiverName: 'Buyer Lakoe 4',
-                receiverAddress: 'Jl. New York Utara no. 669',
-                receiverDistrict: 'Los Angeles',
+                receiverEmail: "a@a.com",
+                receiverName: "Buyer Lakoe 4",
+                receiverAddress: "Jl. New York Utara no. 669",
+                receiverDistrict: "Los Angeles",
                 receiverLatitude: 4.123123123,
                 receiverLongtitude: 6.321321321,
-                receiverVillage: 'Cikeas Udik',
-                receiverPhone: '6281081081084',
-                receiverEmail: 'example4@gmail.com',
+                receiverVillage: "Cikeas Udik",
+                receiverPhone: "6281081081084",
                 cartId: 669,
-                courierId: 669,
                 userId: 999,
             },
             {
                 id: 670,
-                invoiceNumber: 'INV/670/MPL/670',
-                status: 'Pesanan Selesai',
+                invoiceNumber: "INV/670/MPL/670",
+                status: "Pesanan Selesai",
                 serviceCharge: 7500,
                 price: 670000,
-                receiverName: 'Buyer Lakoe 5',
-                receiverAddress: 'Jl. New York Tengah no. 670',
-                receiverDistrict: 'Los Angeles',
+                receiverEmail: "a@a.com",
+                receiverName: "Buyer Lakoe 5",
+                receiverAddress: "Jl. New York Tengah no. 670",
+                receiverDistrict: "Los Angeles",
                 receiverLatitude: 5.123123123,
                 receiverLongtitude: 7.321321321,
-                receiverVillage: 'Cikeas Udik',
-                receiverPhone: '6281081081085',
-                receiverEmail: 'example5@gmail.com',
+                receiverVillage: "Cikeas Udik",
+                receiverPhone: "6281081081085",
                 cartId: 670,
-                courierId: 670,
                 userId: 999,
             },
-        ]
+        ];
 
         for (const invoice of invoices) {
             await prisma.invoices.upsert({
                 where: { id: invoice.id },
                 update: {},
                 create: invoice,
-            })
+            });
         }
-    })
+    });
 }
 
 main()
     .catch((e) => {
-        throw e
+        throw e;
     })
     .finally(async () => {
-        await prisma.$disconnect()
-    })
+        await prisma.$disconnect();
+    });

@@ -15,6 +15,7 @@ import { CourierModule } from './courier/courier.module'
 import { MidtransModule } from 'src/midtrans/midtrans.module'
 import { PaymentModule } from './payment/payment.module'
 import { AuthenticationMiddleware } from 'src/middlewares/authentication.middleware'
+import { StoreModule } from './store/store.module'
 
 @Module({
     imports: [
@@ -33,6 +34,7 @@ import { AuthenticationMiddleware } from 'src/middlewares/authentication.middlew
         CourierModule,
         MidtransModule,
         PaymentModule,
+        StoreModule
     ],
     controllers: [],
     providers: [],

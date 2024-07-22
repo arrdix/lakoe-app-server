@@ -60,8 +60,8 @@ export class ProductController {
     }
 
     @Get('/id/:id')
-    findOneByID(@Param('sku') id: number) {
-        return this.productService.findOneByID(id)
+    findOneByID(@Param('id') id: number) {
+        return this.productService.findOneByID(+id)
     }
 
     @Get('sku')
@@ -111,14 +111,14 @@ export class ProductController {
     @Patch('nonActived/skus')
     nonActivedManyBySKU(@Body() skus: SkusDto) {
         console.log(skus.skus)
-        return this.productService.removeManyBySKU(skus.skus)
+        return this.productService.nonActivedManyBySKU(skus.skus)
         // return(skus)
     }
 
     // update produk per sku
     @Patch('update-bySKU/:sku')
     updateBySKU(@Param('sku') sku: string, @Body() data: UpdateVariantOptionValueDto) {
-        // console.log(data)
+        console.log(data)
         return this.productService.updateProductBySKU(sku, data)
         // return(data)
     }

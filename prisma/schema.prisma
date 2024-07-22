@@ -48,9 +48,10 @@ model Profile {
 }
 
 model Carts {
-  id       Int @id @default(autoincrement())
-  price    Int
-  discount Int
+  id         Int     @id @default(autoincrement())
+  price      Int
+  discount   Int
+  isComplete Boolean @default(false)
 
   users   Users?  @relation(fields: [userId], references: [id])
   userId  Int?
@@ -88,16 +89,18 @@ model Invoices {
   receiverPhone      String?
   receiverAddress    String
   receiverName       String
+  receiverEmail      String
   invoiceNumber      String
   notes              String?
 
-  carts  Carts? @relation(fields: [cartId], references: [id])
-  cartId Int?
-  users  Users? @relation(fields: [userId], references: [id])
-  userId Int?
+  carts     Carts?    @relation(fields: [cartId], references: [id])
+  cartId    Int?
+  users     Users?    @relation(fields: [userId], references: [id])
+  userId    Int?
+  courier   Couriers? @relation(fields: [courierId], references: [id])
+  courierId Int?      @unique
 
   confirmationPayment ConfirmationPayment?
-  courier             Couriers?
   payments            Payments?
   invoiceHistory      InvoiceHistories[]
   createdAt           DateTime             @default(now())
@@ -123,11 +126,10 @@ model InvoiceHistories {
 }
 
 model Payments {
-  id                 Int    @id @default(autoincrement())
-  bank               String
-  amount             Int
-  status             String
-  mootaTransactionId Int
+  id     Int    @id @default(autoincrement())
+  bank   String
+  amount Int
+  status String
 
   invoice   Invoices @relation(fields: [invoiceId], references: [id])
   invoiceId Int      @unique
@@ -139,10 +141,8 @@ model Couriers {
   courierServiceName String
   courierServiceCode String
   price              Int
-  orderId            Int
 
-  invoices  Invoices? @relation(fields: [invoiceId], references: [id])
-  invoiceId Int       @unique
+  Invoices Invoices?
 }
 
 model Stores {

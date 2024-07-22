@@ -24,7 +24,7 @@ export class CreateProductDto {
     storeId: number
 
     @IsNumber()
-    categoryId: number
+    categoryName: string
 
     @IsString()
     url: string

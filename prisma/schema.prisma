@@ -30,6 +30,8 @@ model Users {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+
+  Stores Stores?
 }
 
 model Roles {
@@ -92,6 +94,7 @@ model Invoices {
   receiverEmail      String
   invoiceNumber      String
   notes              String?
+  waybill            String?
 
   carts     Carts?    @relation(fields: [cartId], references: [id])
   cartId    Int?
@@ -153,6 +156,9 @@ model Stores {
   domain           String
   logoAttachment   String
   bannerAttachment String
+
+  userIdRel Users? @relation(fields: [userId], references: [id])
+  userId    Int?   @unique
 
   carts              Carts[]
   cartItems          CartItems[]

@@ -7,8 +7,14 @@ import { Readable } from 'stream';
 export class CloudinaryService {
     async uploadFile(file: Express.Multer.File): Promise<CloudinaryResponse> {
         return new Promise<CloudinaryResponse>((resolve, reject) => {
+            if (!file || !file.buffer) {
+                return reject(new Error('File or file buffer is missing'));
+            }
+
             const uploadStream = cloudinary.uploader.upload_stream((error, result) => {
-                if (error) return reject(error);
+                if (error) {
+                    return reject(error);
+                }
                 resolve(result as CloudinaryResponse);
             });
 

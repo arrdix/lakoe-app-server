@@ -20,10 +20,7 @@ export class StoreService {
 
     const store = await this.prisma.stores.create({
       data: {
-        name: createStoreDto.name,
-        slogan: createStoreDto.slogan,
-        description: createStoreDto.description,
-        domain: createStoreDto.domain,
+        ...createStoreDto,
         logoAttachment: logoUploadResult.secure_url,
         bannerAttachment: bannerUploadResult.secure_url,
       }

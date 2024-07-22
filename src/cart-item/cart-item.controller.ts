@@ -21,7 +21,13 @@ export class CartItemController {
 
     @Get('count')
     async count(@Res() res: Response) {
-        const loggedUserId = res.locals.user.id
+        const loggedUser = res.locals.user
+        const loggedUserId = loggedUser ? loggedUser.id : null
+
+        if (!loggedUserId) {
+            return res.status(200).json(0)
+        }
+
         const response = await this.cartItemService.count(loggedUserId)
 
         res.status(200).json(response)

@@ -130,7 +130,9 @@ export class ProductService {
                         },
                     },
                 },
-            },
+            }, orderBy:{
+                id:'asc'
+            }
         })
 
         return products.map((product) => {

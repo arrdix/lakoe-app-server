@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateStoreDto } from './dto/create-store.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+import { CreateLocationDto } from './dto/create-location.dto';
 
 @Injectable()
 export class StoreService {
@@ -28,4 +29,27 @@ export class StoreService {
 
     return store;
   }
+
+
+  async createLocation(
+    CreateLocationDto: CreateLocationDto
+  ) {
+    const location = await this.prisma.locations.create({
+      data: CreateLocationDto
+    })
+
+    return location;
+  }
+  async findStore(userId:number) {
+    const store = await this.prisma.stores.findFirst({
+      where:{
+        userId:666
+      }
+    })
+
+    return store;
+  }
+
 }
+
+

@@ -9,6 +9,7 @@ import {
     UseInterceptors,
     UploadedFiles,
     Header,
+    Res,
 } from '@nestjs/common'
 import { ProductService } from './product.service'
 import { CreateProductDto } from './dto/create-product.dto'
@@ -17,6 +18,7 @@ import { FilesInterceptor } from '@nestjs/platform-express'
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service'
 import { SkusDto } from './dto/find-skus.dto'
 import { UpdateVariantOptionValueDto } from 'src/variant-option-value/dto/update-variant-option-value.dto'
+import { Response } from 'express'
 
 @Controller('product')
 export class ProductController {
@@ -30,11 +32,10 @@ export class ProductController {
     @UseInterceptors(FilesInterceptor('attachments'))
     async create(
         @Body() createProductDto: CreateProductDto,
-        @UploadedFiles() files: Express.Multer.File[]
+        @UploadedFiles() files: Express.Multer.File[],
+        @Res() res: Response
     ) {
-        console.log(files)
-        console.log(JSON.stringify(createProductDto))
-
+        const loggedUserId = res.locals.user.id
         const attachments = []
 
         for (const file of files) {
@@ -48,10 +49,12 @@ export class ProductController {
             }
         }
 
-        return await this.productService.create({
+        const response = await this.productService.create(loggedUserId, {
             ...createProductDto,
             attachments,
         })
+
+        res.status(200).json(response)
     }
 
     @Get('id')

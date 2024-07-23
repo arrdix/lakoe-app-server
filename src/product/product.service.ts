@@ -1,3 +1,4 @@
+import { StoreService } from './../store/store.service'
 import { Injectable } from '@nestjs/common'
 import { CreateProductDto } from './dto/create-product.dto'
 import { UpdateProductDto } from './dto/update-product.dto'
@@ -9,13 +10,16 @@ import { CategoryService } from 'src/category/category.service'
 export class ProductService {
     constructor(
         private readonly prismaService: PrismaService,
-        private readonly categoryService: CategoryService
+        private readonly categoryService: CategoryService,
+        private readonly storeService: StoreService
     ) {}
 
-    async create(createProductDto: CreateProductDto) {
+    async create(loggedUserId: number, createProductDto: CreateProductDto) {
         const requestedCategory = await this.categoryService.findOneByName(
             createProductDto.categoryName
         )
+
+        const associatedStore = await this.storeService.findStore(loggedUserId)
 
         return await this.prismaService.products.create({
             data: {
@@ -24,7 +28,7 @@ export class ProductService {
                 attachments: createProductDto.attachments,
                 isActive: createProductDto.isActive,
                 minimumOrder: +createProductDto.minimumOrder,
-                storeId: +createProductDto.storeId, // TODO: replace with storeid associated with logged user
+                storeId: associatedStore.id,
                 categoryId: requestedCategory.id,
                 url: createProductDto.url,
                 variant: {
@@ -138,9 +142,10 @@ export class ProductService {
                         },
                     },
                 },
-            }, orderBy:{
-                id:'asc'
-            }
+            },
+            orderBy: {
+                id: 'asc',
+            },
         })
 
         return products.map((product) => {

@@ -16,7 +16,7 @@ export class PaymentService {
         )
 
         await this.orderService.update(requestedInvoice.id, {
-            status: 'PESANAN BARU',
+            status: 'Pesanan Baru',
         })
 
         delete createPaymentDto.invoiceNumber

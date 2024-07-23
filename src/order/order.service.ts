@@ -125,6 +125,14 @@ export class OrderService {
         })
     }
 
+    async findOneByWaybill(waybill: string) {
+        return await this.prismaService.invoices.findFirst({
+            where: {
+                waybill,
+            },
+        })
+    }
+
     update(id: number, updateOrderDto: UpdateOrderDto) {
         return this.prismaService.invoices.update({
             where: {

@@ -34,33 +34,32 @@ export class CartItemService {
             price: requestedCart.price + totalPrice,
         })
 
-        const variantOptionValue = await this.prismaService.variantOptionValues.findFirst({
-            where: {
-                sku: createCartItemDto.sku,
-            },
-        })
+        // const variantOptionValue = await this.prismaService.variantOptionValues.findFirst({
+        //     where: {
+        //         sku: createCartItemDto.sku,
+        //     },
+        // })
+
+        // const cartItem = await this.prismaService.cartItems.findFirst({
+        //     where: {
+        //         userId: createCartItemDto.userId,
+        //         storeId: createCartItemDto.storeId,
+        //         variantOptionValueId: variantOptionValue.id,
+        //     },
+        // })
+
+        // if (cartItem) {
+        //     return this.prismaService.cartItems.update({
+        //         where: {
+        //             id: cartItem.id,
+        //         },
+        //         data: {
+        //             qty: cartItem.id + createCartItemDto.qty,
+        //         },
+        //     })
+        // }
 
         delete createCartItemDto.sku
-
-        const cartItem = await this.prismaService.cartItems.findFirst({
-            where: {
-                userId: createCartItemDto.userId,
-                storeId: createCartItemDto.storeId,
-                variantOptionValueId: variantOptionValue.id,
-            },
-        })
-
-        if (cartItem) {
-            return this.prismaService.cartItems.update({
-                where: {
-                    id: cartItem.id,
-                },
-                data: {
-                    qty: cartItem.id + createCartItemDto.qty,
-                },
-            })
-        }
-
         return this.prismaService.cartItems.create({
             data: {
                 ...createCartItemDto,

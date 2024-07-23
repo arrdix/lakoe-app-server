@@ -8,10 +8,10 @@ import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class StoreService {
-  constructor(
-    private prisma: PrismaService,
-    private cloudinary: CloudinaryService,
-  ) { }
+    constructor(
+        private prisma: PrismaService,
+        private cloudinary: CloudinaryService
+    ) {}
 
   async create(
     logoFile: Express.Multer.File,
@@ -32,8 +32,8 @@ export class StoreService {
       }
     });
 
-    return store;
-  }
+        return store
+    }
 
   async update(
     storeId: number,
@@ -68,7 +68,6 @@ export class StoreService {
 
   
 
-
   async createLocation(
     CreateLocationDto: CreateLocationDto
   ) {
@@ -78,6 +77,7 @@ export class StoreService {
 
     return location;
   }
+
   async findStore(userId: number) {
     const store = await this.prisma.stores.findFirst({
       where: {
@@ -88,6 +88,21 @@ export class StoreService {
     return store;
   }
 
+  async findLocation(profileId: number) {
+    const location = await this.prisma.locations.findFirst({
+      where: {
+        profileId
+      }
+    })
+    return location;
+  }
+
+  async deleteLocation(profileId: number) {
+    const store = await this.prisma.locations.deleteMany({
+      where: {
+        profileId
+      }
+    })
+    return store;
+  }
 }
-
-

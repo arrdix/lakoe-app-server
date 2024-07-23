@@ -44,4 +44,8 @@ export class CreateOrderDto {
     @IsNumber()
     @IsOptional()
     userId: number
+
+    @IsString()
+    @IsOptional()
+    waybill: string
 }

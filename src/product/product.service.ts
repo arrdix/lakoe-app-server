@@ -1,14 +1,26 @@
+import { StoreService } from './../store/store.service'
 import { Injectable } from '@nestjs/common'
 import { CreateProductDto } from './dto/create-product.dto'
 import { UpdateProductDto } from './dto/update-product.dto'
 import { PrismaService } from 'src/prisma/prisma.service'
 import { UpdateVariantOptionValueDto } from 'src/variant-option-value/dto/update-variant-option-value.dto'
+import { CategoryService } from 'src/category/category.service'
 
 @Injectable()
 export class ProductService {
-    constructor(private readonly prismaService: PrismaService) {}
+    constructor(
+        private readonly prismaService: PrismaService,
+        private readonly categoryService: CategoryService,
+        private readonly storeService: StoreService
+    ) {}
 
-    async create(createProductDto: CreateProductDto) {
+    async create(loggedUserId: number, createProductDto: CreateProductDto) {
+        const requestedCategory = await this.categoryService.findOneByName(
+            createProductDto.categoryName
+        )
+
+        const associatedStore = await this.storeService.findStore(loggedUserId)
+
         return await this.prismaService.products.create({
             data: {
                 name: createProductDto.name,
@@ -16,8 +28,8 @@ export class ProductService {
                 attachments: createProductDto.attachments,
                 isActive: createProductDto.isActive,
                 minimumOrder: +createProductDto.minimumOrder,
-                storeId: +createProductDto.storeId,
-                categoryId: +createProductDto.categoryId,
+                storeId: associatedStore.id,
+                categoryId: requestedCategory.id,
                 url: createProductDto.url,
                 variant: {
                     create: {
@@ -130,9 +142,10 @@ export class ProductService {
                         },
                     },
                 },
-            }, orderBy:{
-                id:'asc'
-            }
+            },
+            orderBy: {
+                id: 'asc',
+            },
         })
 
         return products.map((product) => {

@@ -19,9 +19,19 @@ export class OrderController {
         res.status(200).json(response)
     }
 
+    @Get('summary')
+    async orderSummary(@Res() res: Response) {
+        const loggedUserId = res.locals.user.id
+        const response = await this.orderService.orderSummary(loggedUserId)
+        res.status(200).json(response)
+    }
+
     @Get()
-    findAll() {
-        return this.orderService.findAll()
+    async findAll(@Res() res: Response) {
+        const loggedUserId = res.locals.user.id
+        const response = await this.orderService.findAll(loggedUserId)
+
+        res.status(200).json(response)
     }
 
     @Get(':id')

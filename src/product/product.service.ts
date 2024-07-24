@@ -130,7 +130,9 @@ export class ProductService {
         })
     }
 
-    async findAllBySKU() {
+    async findAllBySKU(userId: number) {
+        const store = await this.storeService.findStore(userId)
+
         const products = await this.prismaService.variantOptionValues.findMany({
             include: {
                 variantOptions: {
@@ -139,6 +141,15 @@ export class ProductService {
                             include: {
                                 products: true,
                             },
+                        },
+                    },
+                },
+            },
+            where: {
+                variantOptions: {
+                    variant: {
+                        products: {
+                            storeId: store.id,
                         },
                     },
                 },

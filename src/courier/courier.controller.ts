@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Res } from '@nestjs/common'
+import { Controller, Post, Body, Res, Get, Param } from '@nestjs/common'
 import { CourierService } from './courier.service'
 import { CreateCourierDto } from './dto/create-courier.dto'
 import { GetRatesDto } from './dto/get-rates.dto'
@@ -23,6 +23,7 @@ export class CourierController {
 
     @Post('pickup')
     async reqPickup(@Body() reqPickupDto: ReqPickupDto, @Res() res: Response) {
+        console.log(reqPickupDto)
         const response = await this.courierService.reqPickup(reqPickupDto)
 
         res.status(200).json(response)
@@ -35,6 +36,13 @@ export class CourierController {
             data.courier_waybill_id,
             data.status
         )
+
+        res.status(200).json(response)
+    }
+
+    @Get(':id')
+    async findOne(@Param('id') id: number, @Res() res: Response) {
+        const response = await this.courierService.findOne(+id)
 
         res.status(200).json(response)
     }

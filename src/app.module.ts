@@ -34,7 +34,7 @@ import { StoreModule } from './store/store.module'
         CourierModule,
         MidtransModule,
         PaymentModule,
-        StoreModule
+        StoreModule,
     ],
     controllers: [],
     providers: [],
@@ -52,7 +52,8 @@ export class AppModule implements NestModule {
                 { path: '/product/sku/:sku', method: RequestMethod.GET },
                 { path: '/payment', method: RequestMethod.POST },
                 { path: '/payment/finish', method: RequestMethod.GET },
-                { path: '/courier/update', method: RequestMethod.POST }
+                { path: '/courier/update', method: RequestMethod.POST },
+                { path: '/store/:id', method: RequestMethod.GET }
                 // { path: '/cart/uncomplete', method: RequestMethod.GET },
                 // { path: '/cart-item/count', method: RequestMethod.GET }
             )

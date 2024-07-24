@@ -53,8 +53,23 @@ export class OrderService {
         })
     }
 
-    async findAll() {
+    async findAll(loggedUserId: number) {
+        const store = await this.prismaService.stores.findFirst({
+            where: {
+                userId: loggedUserId,
+            },
+        })
+
+        if (!store) {
+            throw new Error()
+        }
+
         return await this.prismaService.invoices.findMany({
+            where: {
+                carts: {
+                    storeId: store.id,
+                },
+            },
             include: {
                 carts: {
                     include: {
@@ -131,6 +146,81 @@ export class OrderService {
                 waybill,
             },
         })
+    }
+
+    async orderSummary(loggedUserId: number) {
+        const store = await this.prismaService.stores.findFirst({
+            where: {
+                userId: loggedUserId,
+            },
+        })
+
+        if (!store) {
+            throw new Error()
+        }
+
+        const belumDibayar = await this.prismaService.invoices.count({
+            where: {
+                status: 'Belum Dibayar',
+                carts: {
+                    storeId: store.id,
+                },
+            },
+        })
+
+        const pesananBaru = await this.prismaService.invoices.count({
+            where: {
+                status: 'Pesanan Baru',
+                carts: {
+                    storeId: store.id,
+                },
+            },
+        })
+
+        const siapDikirim = await this.prismaService.invoices.count({
+            where: {
+                status: 'Siap Dikirim',
+                carts: {
+                    storeId: store.id,
+                },
+            },
+        })
+
+        const dalamPengiriman = await this.prismaService.invoices.count({
+            where: {
+                status: 'Dalam Pengiriman',
+                carts: {
+                    storeId: store.id,
+                },
+            },
+        })
+
+        const pesananSelesai = await this.prismaService.invoices.count({
+            where: {
+                status: 'Pesanan Selesai',
+                carts: {
+                    storeId: store.id,
+                },
+            },
+        })
+
+        const dibatalkan = await this.prismaService.invoices.count({
+            where: {
+                status: 'Dibatlak',
+                carts: {
+                    storeId: store.id,
+                },
+            },
+        })
+
+        return {
+            belumDibayar,
+            pesananBaru,
+            siapDikirim,
+            dalamPengiriman,
+            pesananSelesai,
+            dibatalkan,
+        }
     }
 
     update(id: number, updateOrderDto: UpdateOrderDto) {

@@ -15,6 +15,9 @@ export class UserService {
             where: {
                 id,
             },
+            include: {
+                Stores: true,
+            },
         })
 
         delete loggedUser.password

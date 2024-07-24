@@ -10,6 +10,7 @@ import {
     UploadedFiles,
     Header,
     Res,
+    InternalServerErrorException,
 } from '@nestjs/common'
 import { ProductService } from './product.service'
 import { CreateProductDto } from './dto/create-product.dto'
@@ -68,8 +69,15 @@ export class ProductController {
     }
 
     @Get('sku')
-    findAllBySKU() {
-        return this.productService.findAllBySKU()
+    async findAllBySKU(@Res() res: Response) {
+        const logedUserId = res.locals.user.id
+
+        try {
+            const response = await this.productService.findAllBySKU(logedUserId)
+            res.status(200).json(response)
+        } catch (error) {
+            throw new InternalServerErrorException(error.message)
+        }
     }
 
     @Get('/sku/:sku')

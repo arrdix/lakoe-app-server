@@ -10,7 +10,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export async function mailer(email) {
+export async function mailer(email, token) {
   const info = await transporter.sendMail({
     from: '"Lakoe App" <lakoeapp@gmail.com>',
     to: email,
@@ -490,7 +490,7 @@ export async function mailer(email) {
                               <tr>
                                 <td>
                                   <a
-                                    href="http://localhost:5173/auth/forgot"
+                                    href="http://localhost:5173/reset/${token}"
                                     style="
                                       padding: 10px 25px;
                                       background-color: #0086b4;
@@ -547,4 +547,6 @@ export async function mailer(email) {
 </html>
 `,
   });
+
+  console.log(info);
 }

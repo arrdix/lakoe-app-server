@@ -97,27 +97,27 @@ export class AuthService {
     });
 
     if (!requestedUser) {
-      return {
-        error: `User with email ${forgotPasswordDto.email} doesn't exist.`,
-      };
+      throw new Error(
+        `User with email ${forgotPasswordDto.email} doesn't exist.`
+      );
     }
 
-    // call send email
-    mailer(forgotPasswordDto.email);
+    const token = jwt.sign(requestedUser, CONFIG.SECRET_SAUCE);
+    mailer(forgotPasswordDto.email, token);
 
     delete requestedUser.email;
     delete requestedUser.phone;
     delete requestedUser.password;
 
     return {
-      token: jwt.sign(requestedUser, CONFIG.SECRET_SAUCE),
+      token,
     };
   }
 
-  async reset(resetPasswordDto: ResetPasswordDto) {
+  async reset(resetPasswordDto: ResetPasswordDto, requesterId: number) {
     const requestedUser = await this.prismaService.users.update({
       where: {
-        email: resetPasswordDto.requester,
+        id: requesterId,
       },
       data: {
         password: await Hasher.hashPassword(resetPasswordDto.password),

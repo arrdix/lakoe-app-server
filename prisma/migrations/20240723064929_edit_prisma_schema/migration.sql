@@ -69,6 +69,7 @@ CREATE TABLE "Invoices" (
     "receiverEmail" TEXT NOT NULL,
     "invoiceNumber" TEXT NOT NULL,
     "notes" TEXT,
+    "waybill" TEXT,
     "cartId" INTEGER,
     "userId" INTEGER,
     "courierId" INTEGER,
@@ -129,6 +130,7 @@ CREATE TABLE "Stores" (
     "domain" TEXT NOT NULL,
     "logoAttachment" TEXT NOT NULL,
     "bannerAttachment" TEXT NOT NULL,
+    "userId" INTEGER,
 
     CONSTRAINT "Stores_pkey" PRIMARY KEY ("id")
 );
@@ -273,6 +275,9 @@ CREATE UNIQUE INDEX "ConfirmationPayment_invoiceId_key" ON "ConfirmationPayment"
 CREATE UNIQUE INDEX "Payments_invoiceId_key" ON "Payments"("invoiceId");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Stores_userId_key" ON "Stores"("userId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Products_url_key" ON "Products"("url");
 
 -- CreateIndex
@@ -325,6 +330,9 @@ ALTER TABLE "InvoiceHistories" ADD CONSTRAINT "InvoiceHistories_invoiceId_fkey" 
 
 -- AddForeignKey
 ALTER TABLE "Payments" ADD CONSTRAINT "Payments_invoiceId_fkey" FOREIGN KEY ("invoiceId") REFERENCES "Invoices"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Stores" ADD CONSTRAINT "Stores_userId_fkey" FOREIGN KEY ("userId") REFERENCES "Users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "StoreOnDecorations" ADD CONSTRAINT "StoreOnDecorations_decorationId_fkey" FOREIGN KEY ("decorationId") REFERENCES "Decorations"("id") ON DELETE SET NULL ON UPDATE CASCADE;

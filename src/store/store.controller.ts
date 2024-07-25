@@ -59,11 +59,12 @@ export class StoreController {
     @Get('myStore')
     async findMyStore(@Res() res: Response) {
         const loggedUserId = res.locals.user.id
+
         const response = await this.storeService.findStore(loggedUserId)
         res.status(200).json(response)
     }
 
-    @Get(':id')
+    @Get('find/:id')
     async findStoreById(@Param('id') id: number, @Res() res: Response) {
         const response = await this.storeService.findStoreById(+id)
         res.status(200).json(response)

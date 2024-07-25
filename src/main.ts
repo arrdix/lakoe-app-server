@@ -9,3 +9,5 @@ async function bootstrap() {
     await app.listen(CONFIG.PORT)
 }
 bootstrap()
+
+export default bootstrap

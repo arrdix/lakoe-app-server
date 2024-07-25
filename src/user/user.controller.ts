@@ -1,13 +1,14 @@
-import { Controller, Get, Body, Patch, Param, Delete, Response } from '@nestjs/common'
+import { Controller, Get, Body, Patch, Param, Delete, Res } from '@nestjs/common'
 import { UserService } from './user.service'
 import { UpdateUserDto } from './dto/update-user.dto'
+import { Response } from 'express'
 
 @Controller('user')
 export class UserController {
     constructor(private readonly userService: UserService) {}
 
     @Get('logged')
-    async getLoggedUser(@Response() res) {
+    async getLoggedUser(@Res() res: Response) {
         const loggedUserId = res.locals.user.id
         const loggedUser = await this.userService.getLoggedUser(loggedUserId)
 

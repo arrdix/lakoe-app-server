@@ -74,11 +74,14 @@ export class StoreService {
     }
 
     async findStore(userId: number) {
-        const store = await this.prisma.stores.findFirst({
+        console.log('OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO', userId)
+        const store = await this.prisma.stores.findUnique({
             where: {
                 userId: userId,
             },
         })
+
+        console.log(store)
 
         if (!store) {
             throw new Error()

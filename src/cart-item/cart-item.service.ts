@@ -1,12 +1,9 @@
 import { UserService } from './../user/user.service'
 import { Injectable } from '@nestjs/common'
 import { CreateCartItemDto } from './dto/create-cart-item.dto'
-import { UpdateCartItemDto } from './dto/update-cart-item.dto'
-import { PrismaService } from 'src/prisma/prisma.service'
-import { User } from 'src/types/user-type'
-import { CartItem } from 'src/types/cart-item-type'
-import { CartService } from 'src/cart/cart.service'
-import { VariantOptionValueService } from 'src/variant-option-value/variant-option-value.service'
+import { PrismaService } from '../prisma/prisma.service'
+import { CartService } from '../cart/cart.service'
+import { VariantOptionValueService } from '../variant-option-value/variant-option-value.service'
 
 @Injectable()
 export class CartItemService {

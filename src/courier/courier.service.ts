@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common'
 import { CreateCourierDto } from './dto/create-courier.dto'
-import { PrismaService } from 'src/prisma/prisma.service'
+import { PrismaService } from '../prisma/prisma.service'
 import { UpdateCourierDto } from './dto/update-courier.dto'
 import { GetRatesDto } from './dto/get-rates.dto'
 import axios from 'axios'
-import CONFIG from 'src/configs/config'
-import { ReqPickupDto } from 'src/courier/dto/req-pickup.dto'
-import { OrderService } from 'src/order/order.service'
+import CONFIG from '../configs/config'
+import { ReqPickupDto } from '../courier/dto/req-pickup.dto'
+import { OrderService } from '../order/order.service'
 
 @Injectable()
 export class CourierService {

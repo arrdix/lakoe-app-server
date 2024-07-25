@@ -2,9 +2,9 @@ import { StoreService } from './../store/store.service'
 import { Injectable } from '@nestjs/common'
 import { CreateProductDto } from './dto/create-product.dto'
 import { UpdateProductDto } from './dto/update-product.dto'
-import { PrismaService } from 'src/prisma/prisma.service'
-import { UpdateVariantOptionValueDto } from 'src/variant-option-value/dto/update-variant-option-value.dto'
-import { CategoryService } from 'src/category/category.service'
+import { PrismaService } from '../prisma/prisma.service'
+import { UpdateVariantOptionValueDto } from '../variant-option-value/dto/update-variant-option-value.dto'
+import { CategoryService } from '../category/category.service'
 
 @Injectable()
 export class ProductService {

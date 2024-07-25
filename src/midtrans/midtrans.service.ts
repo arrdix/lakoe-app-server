@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import CONFIG from 'src/configs/config'
+import CONFIG from '../configs/config'
 import { CreateTransactionDto } from './dto/create-transaction.dto'
 import { Midtrans } from '@miwone/midtrans-client-typescript'
 

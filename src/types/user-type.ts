@@ -1,4 +1,4 @@
-import { Cart } from 'src/types/cart-type'
+import { Cart } from '../types/cart-type'
 
 export type User = {
     id: number

@@ -1,6 +1,6 @@
 import { Type } from 'class-transformer'
 import { IsArray, IsBoolean, IsNumber, IsOptional, IsString, ValidateNested } from 'class-validator'
-import { CreateVariantDto } from 'src/variant/dto/create-variant.dto'
+import { CreateVariantDto } from '../../variant/dto/create-variant.dto'
 
 export class CreateProductDto {
     @IsString()

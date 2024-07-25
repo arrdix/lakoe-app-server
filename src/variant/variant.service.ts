@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { PrismaService } from 'src/prisma/prisma.service'
+import { PrismaService } from '../prisma/prisma.service'
 import { CreateVariantDto } from './dto/create-variant.dto'
 import { UpdateVariantDto } from './dto/update-variant.dto'
 
@@ -56,6 +56,7 @@ export class VariantService {
         })
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async update(id: number, updateVariantDto: UpdateVariantDto) {
         const existingVariant = await this.prismaService.variants.findUnique({
             where: { id },

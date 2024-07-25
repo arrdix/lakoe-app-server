@@ -10,11 +10,11 @@ import { VariantModule } from './variant/variant.module'
 import { VariantOptionModule } from './variant-option/variant-option.module'
 import { VariantOptionValueModule } from './variant-option-value/variant-option-value.module'
 import { AuthModule } from './auth/auth.module'
-import { CloudinaryModule } from 'src/cloudinary/cloudinary.module'
+import { CloudinaryModule } from './cloudinary/cloudinary.module'
 import { CourierModule } from './courier/courier.module'
-import { MidtransModule } from 'src/midtrans/midtrans.module'
+import { MidtransModule } from './midtrans/midtrans.module'
 import { PaymentModule } from './payment/payment.module'
-import { AuthenticationMiddleware } from 'src/middlewares/authentication.middleware'
+import { AuthenticationMiddleware } from './middlewares/authentication.middleware'
 import { StoreModule } from './store/store.module'
 
 @Module({
@@ -54,8 +54,6 @@ export class AppModule implements NestModule {
                 { path: '/payment/finish', method: RequestMethod.GET },
                 { path: '/courier/update', method: RequestMethod.POST },
                 { path: '/store/find/:id', method: RequestMethod.GET }
-                // { path: '/cart/uncomplete', method: RequestMethod.GET },
-                // { path: '/cart-item/count', method: RequestMethod.GET }
             )
             .forRoutes({ path: '*', method: RequestMethod.ALL })
     }

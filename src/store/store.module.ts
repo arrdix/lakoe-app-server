@@ -1,13 +1,13 @@
-import { Module } from '@nestjs/common';
-import { StoreService } from './store.service';
-import { StoreController } from './store.controller';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { CloudinaryModule } from 'src/cloudinary/cloudinary.module';
-import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+import { Module } from '@nestjs/common'
+import { StoreService } from './store.service'
+import { StoreController } from './store.controller'
+import { PrismaService } from '../prisma/prisma.service'
+import { CloudinaryModule } from '../cloudinary/cloudinary.module'
+import { CloudinaryService } from '../cloudinary/cloudinary.service'
 
 @Module({
-  imports: [CloudinaryModule],
-  controllers: [StoreController],
-  providers: [StoreService, PrismaService, CloudinaryService],
+    imports: [CloudinaryModule],
+    controllers: [StoreController],
+    providers: [StoreService, PrismaService, CloudinaryService],
 })
-export class StoreModule { }
+export class StoreModule {}

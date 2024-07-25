@@ -35,14 +35,6 @@ export class AuthService {
         // create profile for new user
         this.createProfile(createdUser.id)
 
-        // create default cart for new user
-        this.cartService.create({
-            price: 0,
-            discount: 0,
-            userId: createdUser.id,
-            storeId: null,
-        })
-
         return {
             status: 'Ok!',
         }

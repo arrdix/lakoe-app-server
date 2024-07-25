@@ -36,6 +36,8 @@ export class ProductController {
         @UploadedFiles() files: Express.Multer.File[],
         @Res() res: Response
     ) {
+        console.log(createProductDto)
+        console.log(files)
         const loggedUserId = res.locals.user.id
         const attachments = []
 

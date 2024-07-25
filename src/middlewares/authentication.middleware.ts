@@ -1,6 +1,6 @@
 import * as jwt from 'jsonwebtoken'
 import { Injectable } from '@nestjs/common'
-import CONFIG from 'src/configs/config'
+import CONFIG from '../configs/config'
 
 @Injectable()
 export class AuthenticationMiddleware {

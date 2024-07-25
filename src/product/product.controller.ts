@@ -18,7 +18,7 @@ import { UpdateProductDto } from './dto/update-product.dto'
 import { FilesInterceptor } from '@nestjs/platform-express'
 import { CloudinaryService } from '../cloudinary/cloudinary.service'
 import { SkusDto } from './dto/find-skus.dto'
-import { UpdateVariantOptionValueDto } from 'src/variant-option-value/dto/update-variant-option-value.dto'
+import { UpdateVariantOptionValueDto } from '../variant-option-value/dto/update-variant-option-value.dto'
 import { Response } from 'express'
 
 @Controller('product')

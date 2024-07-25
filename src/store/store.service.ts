@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { CreateStoreDto } from './dto/create-store.dto'
-import { PrismaService } from 'src/prisma/prisma.service'
+import { PrismaService } from '../prisma/prisma.service'
 import { CloudinaryService } from '../cloudinary/cloudinary.service'
 import { CreateLocationDto } from './dto/create-location.dto'
 import { UpdateStoreDto } from './dto/update-store.dto'

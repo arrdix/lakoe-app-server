@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common'
 import { StoreService } from './store.service'
 import { StoreController } from './store.controller'
-import { PrismaService } from 'src/prisma/prisma.service'
+import { PrismaService } from '../prisma/prisma.service'
 import { CloudinaryModule } from '../cloudinary/cloudinary.module'
 import { CloudinaryService } from '../cloudinary/cloudinary.service'
 

@@ -1,4 +1,4 @@
-import { CartItem } from 'src/types/cart-item-type'
+import { CartItem } from '../types/cart-item-type'
 
 export type Cart = {
     id: number

@@ -3,7 +3,7 @@ import { CourierService } from './courier.service'
 import { CreateCourierDto } from './dto/create-courier.dto'
 import { GetRatesDto } from './dto/get-rates.dto'
 import { Response } from 'express'
-import { ReqPickupDto } from 'src/courier/dto/req-pickup.dto'
+import { ReqPickupDto } from '../courier/dto/req-pickup.dto'
 
 @Controller('courier')
 export class CourierController {

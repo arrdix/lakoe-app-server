@@ -1,43 +1,51 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from "@nestjs/common";
-import { OrderService } from "./order.service";
-import { CreateOrderDto } from "./dto/create-order.dto";
-import { UpdateOrderDto } from "./dto/update-order.dto";
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res } from '@nestjs/common'
+import { OrderService } from './order.service'
+import { CreateOrderDto } from './dto/create-order.dto'
+import { UpdateOrderDto } from './dto/update-order.dto'
+import { Response } from 'express'
 
-@Controller("order")
+@Controller('order')
 export class OrderController {
-  constructor(private readonly orderService: OrderService) {}
+    constructor(private readonly orderService: OrderService) {}
 
-  @Post()
-  create(@Body() createOrderDto: CreateOrderDto) {
-    console.log(createOrderDto);
-    return this.orderService.create(createOrderDto);
-  }
+    @Post()
+    async createDirectOrder(@Body() createOrderDto: CreateOrderDto, @Res() res: Response) {
+        const loggedUserId = res.locals.user.id
+        const response = await this.orderService.create({
+            ...createOrderDto,
+            userId: loggedUserId,
+        })
 
-  @Get()
-  findAll() {
-    return this.orderService.findAll();
-  }
+        res.status(200).json(response)
+    }
 
-  @Get(":id")
-  findOne(@Param("id") id: string) {
-    return this.orderService.findOne(+id);
-  }
+    @Get('summary')
+    async orderSummary(@Res() res: Response) {
+        const loggedUserId = res.locals.user.id
+        const response = await this.orderService.orderSummary(loggedUserId)
+        res.status(200).json(response)
+    }
 
-  @Patch(":id")
-  update(@Param("id") id: string, @Body() updateOrderDto: UpdateOrderDto) {
-    return this.orderService.update(+id, updateOrderDto);
-  }
+    @Get()
+    async findAll(@Res() res: Response) {
+        const loggedUserId = res.locals.user.id
+        const response = await this.orderService.findAll(loggedUserId)
 
-  @Delete(":id")
-  remove(@Param("id") id: string) {
-    return this.orderService.remove(+id);
-  }
+        res.status(200).json(response)
+    }
+
+    @Get(':id')
+    findOne(@Param('id') id: string) {
+        return this.orderService.findOne(+id)
+    }
+
+    @Patch(':id')
+    update(@Param('id') id: string, @Body() updateOrderDto: UpdateOrderDto) {
+        return this.orderService.update(+id, updateOrderDto)
+    }
+
+    @Delete(':id')
+    remove(@Param('id') id: string) {
+        return this.orderService.remove(+id)
+    }
 }
